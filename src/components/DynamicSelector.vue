@@ -1,6 +1,18 @@
 <template>
   <div class="selector">
-    <component :is="component" :type="type" v-if="component" ref="elComponent" />
+    <component
+      :is="component"
+      :type="type"
+      v-if="component && !functionData.isTemplate"
+      ref="elComponent"
+    />
+    <component
+      :is="component"
+      :type="type"
+      v-else-if="component && functionData.isTemplate"
+      ref="elComponent"
+      :templateOptions="functionData.templateOptions  "
+    />
     <select v-model="type" v-else>
       <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
     </select>
@@ -26,7 +38,12 @@ export default {
     loader() {
       if (this.type) {
         var f = this.lFunctions[this.type];
-        if (f) return f.component;
+        if (f) {
+          if (f.isTemplate) {
+            f.component = () => import(`@/components/functions/Placeholder`);
+          }
+          if (f.component) return f;
+        }
         // return () => import(`@/components/functions/${this.type}`);
       }
       return null;
@@ -43,6 +60,7 @@ export default {
   data() {
     return {
       component: null,
+      functionData: {},
       type: "",
       bannerStyles: {
         ...defaultStyles,
@@ -52,15 +70,21 @@ export default {
   },
   methods: {
     loadComponent: function() {
-      if (this.loader)
-        this.loader()
+      if (this.loader && this.loader.component)
+        this.loader
+          .component()
           .then(() => {
-            this.component = () => this.loader();
+            this.component = () => this.loader.component();
+            this.functionData = this.loader;
           })
           .catch(() => {
             this.component = null;
+            this.functionData = null;
           });
-      else this.component = null;
+      else {
+        this.component = null;
+        this.functionData = null;
+      }
     },
     generateSQL: function() {
       if (this.$refs.elComponent) return this.$refs.elComponent.generateSQL();
@@ -71,7 +95,8 @@ export default {
     },
     removeable: function() {
       return true;
-    }
+    },
+    setData: function(d) {}
   }
 };
 </script>

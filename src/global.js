@@ -2,11 +2,17 @@
 // keep is simple for global ... 
 var lFunctions = {
     "": { id: "", component: () => import("@/components/DynamicSelector.vue") },
-    "trim": { id: "trim", component: () => import("@/components/functions/Trim.vue") },
-    "case": { id: "case", component: () => import("@/components/functions/Case.vue") },
-    "object": { id: "object", component: () => import("@/components/functions/Value.vue") },
-    "attribute": { id: "attribute", component: () => import("@/components/functions/Value.vue") },
-    "value": { id: "value", component: () => import("@/components/functions/Value.vue") },
+    "Trim": { id: "Trim", component: () => import("@/components/functions/Trim.vue") },
+    "Case": { id: "Case", component: () => import("@/components/functions/Case.vue") },
+    "Object": { id: "Object", component: () => import("@/components/functions/Value.vue") },
+    "Attribute": { id: "Attribute", component: () => import("@/components/functions/Value.vue") },
+    "Value": { id: "Value", component: () => import("@/components/functions/Value.vue") },
+    "Custom": {
+        id: "Custom", isTemplate: true, templateOptions: {
+            template: 'CUSTOM ( <dynamic-selector ref="param"></dynamic-selector>, <dynamic-selector ref="param2"></dynamic-selector>)',
+            generateSQL: 'Custom (#param, #param2)',
+        }
+    }, // f-custom
 };
 
 export default {

@@ -45,7 +45,13 @@ export default {
   methods: {
     generateSQL: function() {
       return `TRIM (${this.$refs.trimValue.generateSQL()})`;
-    }
+    },
+    getData: function(){
+      return {
+        type: this.type,
+        value: this.$refs.trimValue.getData(),
+      }
+    },
   }
 };
 </script>

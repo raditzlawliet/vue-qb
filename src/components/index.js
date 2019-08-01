@@ -24,6 +24,13 @@ Object.keys(Components).forEach(name => {
     Vue.component(name, Components[name]);
 });
 
+Object.keys(global.lFunctions).forEach(name => {
+    if (name && global.lFunctions[name].component && !global.lFunctions[name].isCustom) {
+        console.log('Register Component', "F" + name)
+        Vue.component("F" + name, global.lFunctions[name].component);
+    }
+});
+
 export default {
     Components,
     global,

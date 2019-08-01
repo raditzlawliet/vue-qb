@@ -1,8 +1,6 @@
 <template>
   <div class="selector" :style="bannerStyles" :class="`banner__${position}`">
-    <span></span>
     <input v-model="value" />
-    <span>)</span>
   </div>
 </template>
 <script>
@@ -40,6 +38,12 @@ export default {
   methods: {
     generateSQL: function() {
       return this.value;
+    },
+    getData: function() {
+      return {
+        type: this.type,
+        value: this.$refs.trimValue.getData()
+      };
     }
   }
 };

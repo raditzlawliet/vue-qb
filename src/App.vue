@@ -4,6 +4,7 @@
     <!-- <selector ref="foo"></selector> -->
     <dynamic-selector ref="foo"></dynamic-selector>
     <button @click="generateSQL">Print SQL</button>
+    <f-value></f-value>
   </div>
 </template>
 
