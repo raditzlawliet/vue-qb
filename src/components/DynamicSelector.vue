@@ -2,7 +2,7 @@
   <div class="selector">
     <component
       :is="component"
-      :type="type"
+      :query="query"
       v-if="component && !functionData.isTemplate"
       ref="elComponent"
     >
@@ -13,7 +13,7 @@
     </component>
     <component
       :is="component"
-      :type="type"
+      :query="query"
       v-else-if="component && functionData.isTemplate"
       ref="elComponent"
       :templateOptions="functionData.templateOptions"
@@ -23,38 +23,30 @@
         <slot :name="name" v-bind="slotData" />
       </template>
     </component>
-    <select v-model="type" v-else>
+    <select v-model="query.type" v-else>
       <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
     </select>
-    <button v-show="removeable && type" @click="remove">X</button>
+    <button v-show="removeable && query.type" @click="remove">X</button>
   </div>
 </template>
 <script>
 import global from "@/global.js";
-
-const defaultStyles = {
-  left: 0,
-  right: 0
-};
+import Placeholder from "./functions/Placeholder.vue";
 
 export default {
-  props: {
-    // lFunctions: {
-    //   type: Object,
-    //   default: () => global.lFunctions
-    // }
-  },
+  extends: Placeholder,
+  props: {},
   computed: {
     loader() {
-      if (this.type) {
-        var f = this.lFunctions[this.type];
+      if (this.query.type) {
+        var f = this.lFunctions[this.query.type];
         if (f) {
           if (f.isTemplate) {
             f.component = () => import(`@/components/functions/Placeholder`);
           }
           if (f.component) return f;
         }
-        // return () => import(`@/components/functions/${this.type}`);
+        // return () => import(`@/components/functions/${this.query.type}`);
       }
       return null;
     }
@@ -63,7 +55,7 @@ export default {
     this.loadComponent();
   },
   watch: {
-    type: function() {
+    "query.type": function() {
       this.loadComponent();
     }
   },
@@ -71,12 +63,7 @@ export default {
     return {
       lFunctions: global.lFunctions,
       component: null,
-      functionData: {},
-      type: "",
-      bannerStyles: {
-        ...defaultStyles,
-        ...this.styles
-      }
+      functionData: {}
     };
   },
   methods: {
@@ -102,7 +89,7 @@ export default {
       return "";
     },
     remove: function() {
-      this.type = "";
+      this.query.type = "";
     },
     removeable: function() {
       return true;

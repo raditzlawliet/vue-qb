@@ -21,10 +21,15 @@ export default {
         };
       }
     },
-    type: {
-      type: String,
-      default: ""
-    }
+    query: {
+      type: Object,
+      default: function() {
+        return {
+          type: "",
+          value: ""
+        };
+      }
+    },
   },
   data() {
     return {};

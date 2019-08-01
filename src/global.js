@@ -3,6 +3,7 @@
 var lFunctions = {
     "": { id: "", component: () => import("@/components/DynamicSelector.vue") },
     "Trim": { id: "Trim", component: () => import("@/components/functions/Trim.vue") },
+    "Concat": { id: "Concat", component: () => import("@/components/functions/Concat.vue") },
     "Case": { id: "Case", component: () => import("@/components/functions/Case.vue") },
     "Object": { id: "Object", component: () => import("@/components/functions/Value.vue") },
     "Attribute": { id: "Attribute", component: () => import("@/components/functions/Value.vue") },
@@ -22,6 +23,7 @@ var lFunctions = {
 // </template>
 // `
 
+// for recursive scope, will include for isTemplate=true
 var recursiveScope = `
 <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
   <slot :name="name" v-bind="slotData" />

@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <!-- <selector ref="foo"></selector> -->
     <dynamic-selector ref="foo">
       <div style="font-weight: bold;" slot="f-trim-begin">TRIM</div>
     </dynamic-selector>

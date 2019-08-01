@@ -36,14 +36,10 @@
   </div>
 </template>
 <script>
-import global from "@/global.js";
-
 export default {
   props: {},
   data() {
-    return {
-      type: ""
-    };
+    return {};
   },
   methods: {
     generateSQL: function() {

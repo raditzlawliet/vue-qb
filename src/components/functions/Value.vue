@@ -1,47 +1,24 @@
 <template>
-  <div class="selector" :style="bannerStyles" :class="`banner__${position}`">
-    <input v-model="value" />
+  <div class="selector">
+    <input v-model="query.value" />
   </div>
 </template>
 <script>
-import global from "@/global.js";
-
-const defaultStyles = {
-  left: 0,
-  right: 0
-};
+import Placeholder from "./Placeholder.vue";
 
 export default {
-  props: {
-    position: {
-      type: String,
-      default: "top",
-      validator(position) {
-        return ["top", "bottom"].indexOf(position) > -1;
-      }
-    },
-    styles: {
-      type: Object,
-      default: () => ({})
-    }
-  },
+  extends: Placeholder,
+  props: {},
   data() {
-    return {
-      type: "",
-      value: "",
-      bannerStyles: {
-        ...defaultStyles,
-        ...this.styles
-      }
-    };
+    return {};
   },
   methods: {
     generateSQL: function() {
-      return this.value;
+      return this.query.value;
     },
     getData: function() {
       return {
-        type: this.type,
+        type: this.query.type,
         value: this.$refs.trimValue.getData()
       };
     }
