@@ -1,6 +1,11 @@
 <template>
   <div class="functions">
-    <component :is="{template:templateWithWrapper}" ref="placeholder" />
+    <component :is="{template:templateWithWrapper}" ref="placeholder">
+      <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+      <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+        <slot :name="name" v-bind="slotData" />
+      </template>
+    </component>
   </div>
 </template>
 <script>
@@ -31,7 +36,19 @@ export default {
       return [];
     },
     templateWithWrapper() {
-      return `<div>${this.templateOptions.template}</div>`;
+      // insert recursiveScope dari global ke dynamic-selector dan f- tag lainnya yg terdaftar
+      const div = document.createElement("div");
+      div.insertAdjacentHTML("afterbegin", this.templateOptions.template);
+      Array.from(div.querySelectorAll("dynamic-selector")).forEach((el, i) => {
+        el.insertAdjacentHTML("afterbegin", global.recursiveScope);
+      });
+      Object.keys(global.lFunctions).forEach(id => {
+        if (!id) return;
+        Array.from(div.querySelectorAll(`f-${id}`)).forEach((el, i) => {
+          el.insertAdjacentHTML("afterbegin", global.recursiveScope);
+        });
+      });
+      return `<div>${div.innerHTML}</div>`;
     }
   },
   methods: {

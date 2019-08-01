@@ -5,14 +5,24 @@
       :type="type"
       v-if="component && !functionData.isTemplate"
       ref="elComponent"
-    />
+    >
+      <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+      <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+        <slot :name="name" v-bind="slotData" />
+      </template>
+    </component>
     <component
       :is="component"
       :type="type"
       v-else-if="component && functionData.isTemplate"
       ref="elComponent"
       :templateOptions="functionData.templateOptions"
-    />
+    >
+      <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+      <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+        <slot :name="name" v-bind="slotData" />
+      </template>
+    </component>
     <select v-model="type" v-else>
       <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
     </select>
@@ -29,10 +39,10 @@ const defaultStyles = {
 
 export default {
   props: {
-    lFunctions: {
-      type: Object,
-      default: () => global.lFunctions
-    }
+    // lFunctions: {
+    //   type: Object,
+    //   default: () => global.lFunctions
+    // }
   },
   computed: {
     loader() {
@@ -59,6 +69,7 @@ export default {
   },
   data() {
     return {
+      lFunctions: global.lFunctions,
       component: null,
       functionData: {},
       type: "",

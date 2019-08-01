@@ -1,12 +1,17 @@
 <template>
   <div class="selector" :style="bannerStyles" :class="`banner__${position}`">
-    <slot name="begin">
+    <slot name="f-trim-begin">
       <span>TRIM (</span>
     </slot>
-    <slot name="value">
-      <dynamic-selector ref="trimValue"></dynamic-selector>
+    <slot name="f-trim-value">
+      <dynamic-selector ref="trimValue">
+        <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+        <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+          <slot :name="name" v-bind="slotData" />
+        </template>
+      </dynamic-selector>
     </slot>
-    <slot name="end">
+    <slot name="f-trim-end">
       <span>)</span>
     </slot>
   </div>
@@ -35,6 +40,7 @@ export default {
   },
   data() {
     return {
+      scopePlaceholder: global.recursiveScope,
       type: "",
       bannerStyles: {
         ...defaultStyles,
@@ -46,12 +52,12 @@ export default {
     generateSQL: function() {
       return `TRIM (${this.$refs.trimValue.generateSQL()})`;
     },
-    getData: function(){
+    getData: function() {
       return {
         type: this.type,
-        value: this.$refs.trimValue.getData(),
-      }
-    },
+        value: this.$refs.trimValue.getData()
+      };
+    }
   }
 };
 </script>

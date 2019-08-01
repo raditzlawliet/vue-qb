@@ -2,9 +2,11 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <!-- <selector ref="foo"></selector> -->
-    <dynamic-selector ref="foo"></dynamic-selector>
+    <dynamic-selector ref="foo">
+      <div style="font-weight: bold;" slot="f-trim-begin">TRIM</div>
+    </dynamic-selector>
     <button @click="generateSQL">Print SQL</button>
-    <p> {{ generatedSQL }}</p>
+    <p>{{ generatedSQL }}</p>
   </div>
 </template>
 
@@ -17,7 +19,7 @@ export default {
   computed: {},
   data() {
     return {
-      generatedSQL: "",
+      generatedSQL: ""
     };
   },
   methods: {
