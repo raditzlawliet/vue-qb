@@ -4,7 +4,7 @@
     <!-- <selector ref="foo"></selector> -->
     <dynamic-selector ref="foo"></dynamic-selector>
     <button @click="generateSQL">Print SQL</button>
-    <f-value></f-value>
+    <p> {{ generatedSQL }}</p>
   </div>
 </template>
 
@@ -14,9 +14,16 @@ import { settings } from "@/global.js";
 export default {
   name: "app",
   components: {},
+  computed: {},
+  data() {
+    return {
+      generatedSQL: "",
+    };
+  },
   methods: {
     generateSQL: function() {
       var x = this.$refs.foo.generateSQL();
+      this.generatedSQL = x;
       console.log(x);
     }
   },

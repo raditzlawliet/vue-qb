@@ -1,6 +1,6 @@
 <template>
   <div class="functions">
-    <component :is="{template:templateWithWrapper}" />
+    <component :is="{template:templateWithWrapper}" ref="placeholder" />
   </div>
 </template>
 <script>
@@ -15,12 +15,14 @@ export default {
           generateSQL: "#val"
         };
       }
+    },
+    type: {
+      type: String,
+      default: ""
     }
   },
   data() {
-    return {
-      type: ""
-    };
+    return {};
   },
   computed: {
     generateSQLNodes() {
@@ -37,10 +39,14 @@ export default {
       if (!this.generateSQLNodes) return "";
       var sql = "";
       this.generateSQLNodes.forEach((node, i) => {
-        if (node % 2) {
-          if (this.$refs[node]) {
-            sql += this.$refs[node].generateSQL();
+        if (i % 2) {
+          try {
+            // console.log(node, this.$refs.placeholder);
+            // console.log(this.$refs.placeholder.$refs[node]);
+            sql += this.$refs.placeholder.$refs[node].generateSQL();
             return;
+          } catch (e) {
+            console.error(e.stack);
           }
         }
         sql += node;

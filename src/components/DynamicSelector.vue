@@ -11,7 +11,7 @@
       :type="type"
       v-else-if="component && functionData.isTemplate"
       ref="elComponent"
-      :templateOptions="functionData.templateOptions  "
+      :templateOptions="functionData.templateOptions"
     />
     <select v-model="type" v-else>
       <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
