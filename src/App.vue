@@ -1,30 +1,41 @@
 <template>
   <div id="app">
-    <dynamic-selector ref="foo">
+    <dynamic-selector ref="foo" :query="query" @query-update="onQueryUpdate">
       <div style="font-weight: bold;" slot="f-trim-begin">TRIM</div>
     </dynamic-selector>
     <button @click="generateSQL">Print SQL</button>
     <p>{{ generatedSQL }}</p>
+    <p>{{ generatedJSON }}</p>
   </div>
 </template>
 
 <script>
-import { settings } from "@/global.js";
-
 export default {
   name: "app",
   components: {},
   computed: {},
   data() {
     return {
-      generatedSQL: ""
+      generatedSQL: "",
+      generatedJSON: "",
+      query: {
+        // type: "Trim",
+        // value: {
+        //   type: "Concat",
+        //   value: {
+        //     type: ""
+        //   }
+        // }
+      }
     };
   },
   methods: {
     generateSQL: function() {
       var x = this.$refs.foo.generateSQL();
       this.generatedSQL = x;
-      console.log(x);
+    },
+    onQueryUpdate: function(refName, q) {
+      this.generatedJSON = JSON.stringify(q);
     }
   },
   mounted() {}

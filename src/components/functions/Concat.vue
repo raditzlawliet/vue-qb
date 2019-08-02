@@ -1,10 +1,10 @@
 <template>
   <div class="selector">
-    <slot name="f-trim-begin">
-      <span>TRIM (</span>
+    <slot name="f-concat-begin">
+      <span>CONCAT [</span>
     </slot>
-    <slot name="f-trim-value">
-      <dynamic-selector ref="value" emitRef="value" :query="querylocal.value" @query-update="onQueryUpdate">
+    <slot name="f-concat-value">
+      <dynamic-selector ref="value" :query="querylocal.value" @query-update="onQueryUpdate">
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
           <slot :name="name" v-bind="slotData" />
@@ -12,7 +12,7 @@
       </dynamic-selector>
     </slot>
     <slot name="f-trim-end">
-      <span>)</span>
+      <span>]</span>
     </slot>
   </div>
 </template>
@@ -29,6 +29,9 @@ export default {
     generateSQL: function() {
       return `TRIM (${this.$refs.value.generateSQL()})`;
     },
+    // onQueryUpdate: function(q) {
+    //   this.querylocal.value = this.normalizeQuery(q);
+    // }
   }
 };
 </script>

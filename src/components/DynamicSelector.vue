@@ -2,9 +2,11 @@
   <div class="selector">
     <component
       :is="component"
-      :query="query"
+      :query="querylocal"
+      :emitRef="emitRef"
       v-if="component && !functionData.isTemplate"
       ref="elComponent"
+      @query-update="onQueryUpdate"
     >
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -13,20 +15,22 @@
     </component>
     <component
       :is="component"
-      :query="query"
+      :query="querylocal"
+      :emitRef="emitRef"
       v-else-if="component && functionData.isTemplate"
       ref="elComponent"
       :templateOptions="functionData.templateOptions"
+      @query-update="onQueryUpdate"
     >
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
         <slot :name="name" v-bind="slotData" />
       </template>
     </component>
-    <select v-model="query.type" v-else>
+    <select v-model="querylocal.type" v-else>
       <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
     </select>
-    <button v-show="removeable && query.type" @click="remove">X</button>
+    <button v-show="removeable && querylocal.type" @click="remove">X</button>
   </div>
 </template>
 <script>
@@ -38,15 +42,15 @@ export default {
   props: {},
   computed: {
     loader() {
-      if (this.query.type) {
-        var f = this.lFunctions[this.query.type];
+      if (this.querylocal.type) {
+        var f = this.lFunctions[this.querylocal.type];
         if (f) {
           if (f.isTemplate) {
             f.component = () => import(`@/components/functions/Placeholder`);
           }
           if (f.component) return f;
         }
-        // return () => import(`@/components/functions/${this.query.type}`);
+        // return () => import(`@/components/functions/${this.querylocal.type}`);
       }
       return null;
     }
@@ -55,7 +59,7 @@ export default {
     this.loadComponent();
   },
   watch: {
-    "query.type": function() {
+    "querylocal.type": function() {
       this.loadComponent();
     }
   },
@@ -89,12 +93,15 @@ export default {
       return "";
     },
     remove: function() {
-      this.query.type = "";
+      // this.querylocal.type = "";
+      this.querylocal = this.getQueryModel();
     },
     removeable: function() {
       return true;
     },
-    setData: function(d) {}
+    onQueryUpdate: function(emitRef, value) {
+      this.querylocal = this.normalizeQuery(value);
+    }
   }
 };
 </script>

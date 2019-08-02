@@ -1,6 +1,6 @@
 <template>
   <div class="selector">
-    <input v-model="query.value" />
+    <input v-model="querylocal.value" />
   </div>
 </template>
 <script>
@@ -16,12 +16,6 @@ export default {
     generateSQL: function() {
       return this.query.value;
     },
-    getData: function() {
-      return {
-        type: this.query.type,
-        value: this.$refs.trimValue.getData()
-      };
-    }
   }
 };
 </script>

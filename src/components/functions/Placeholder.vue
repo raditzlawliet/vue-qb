@@ -25,16 +25,43 @@ export default {
       type: Object,
       default: function() {
         return {
-          type: "",
-          value: ""
+          type: "", // for type
+          // value: undefined, // for value
+          values: [] // for array
         };
       }
     },
+    emitRef: {
+      type: String,
+      default: "value"
+    }
+  },
+  watch: {
+    querylocal: {
+      handler: function(newVal) {
+        this.$emit("query-update", this.emitRef, newVal);
+      },
+      deep: true
+    }
   },
   data() {
-    return {};
+    return {
+      querylocal: this.normalizeQuery(this.query)
+    };
   },
+  mounted() {},
   computed: {
+    // [read-only] use this to avoid nested object null
+    // normalizedQuery() {
+    //   return Object.assign(
+    //     {
+    //       type: "", // for type
+    //       // value: undefined, // for value
+    //       values: [] // for array
+    //     },
+    //     this.querylocal
+    //   );
+    // },
     generateSQLNodes() {
       if (this.templateOptions.generateSQL)
         return this.templateOptions.generateSQL.split(/#([\w]+)/);
@@ -44,12 +71,12 @@ export default {
       // insert recursiveScope dari global ke dynamic-selector dan f- tag lainnya yg terdaftar
       const div = document.createElement("div");
       div.insertAdjacentHTML("afterbegin", this.templateOptions.template);
-      Array.from(div.querySelectorAll("dynamic-selector")).forEach((el, i) => {
+      Array.from(div.querySelectorAll("dynamic-selector")).forEach(el => {
         el.insertAdjacentHTML("afterbegin", global.recursiveScope);
       });
       Object.keys(global.lFunctions).forEach(id => {
         if (!id) return;
-        Array.from(div.querySelectorAll(`f-${id}`)).forEach((el, i) => {
+        Array.from(div.querySelectorAll(`f-${id}`)).forEach(el => {
           el.insertAdjacentHTML("afterbegin", global.recursiveScope);
         });
       });
@@ -57,6 +84,23 @@ export default {
     }
   },
   methods: {
+    normalizeQuery: function(d) {
+      return Object.assign(
+        {
+          type: "", // for type
+          // value: undefined, // for value
+          values: [] // for array
+        },
+        d
+      );
+    },
+    getQueryModel: function() {
+      return {
+        type: "", // for type
+        // value: undefined, // for value
+        values: [] // for array
+      };
+    },
     generateSQL: function() {
       if (!this.generateSQLNodes) return "";
       var sql = "";
@@ -68,7 +112,7 @@ export default {
             sql += this.$refs.placeholder.$refs[node].generateSQL();
             return;
           } catch (e) {
-            console.error(e.stack);
+            // console.error(e.stack);
           }
         }
         sql += node;
@@ -77,7 +121,14 @@ export default {
     },
     getData: function() {
       return {};
+    },
+    onQueryUpdate: function(emitRef, value) {
+      // this.querylocal[emitRef] = this.normalizeQuery(value);
+      console.log(emitRef, JSON.stringify(this.querylocal));
     }
+    // onQueryUpdate: function(emitRef, value) {
+    //   this.querylocal = this.normalizeQuery(value);
+    // }
   }
 };
 </script>
