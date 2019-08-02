@@ -78,9 +78,9 @@ export default {
     //     d
     //   );
     // }
-    onQueryUpdate: function(emitRef, value) {
-      this.querylocal[emitRef] = this.normalizeQuery(value);
-    }
+    // onQueryUpdate: function(emitRef, value) {
+    //   this.querylocal[emitRef] = this.normalizeQuery(value);
+    // }
   }
 };
 </script>

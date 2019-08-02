@@ -101,6 +101,8 @@ export default {
     },
     onQueryUpdate: function(emitRef, value) {
       this.querylocal = this.normalizeQuery(value);
+      this.$emit("query-update", this.emitRef, this.querylocal);
+      // console.log(emitRef, JSON.stringify(this.querylocal))
     }
   }
 };

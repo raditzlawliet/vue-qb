@@ -39,6 +39,7 @@ export default {
   watch: {
     querylocal: {
       handler: function(newVal) {
+        // console.log(JSON.stringify(newVal))
         this.$emit("query-update", this.emitRef, newVal);
       },
       deep: true
@@ -119,12 +120,10 @@ export default {
       });
       return sql;
     },
-    getData: function() {
-      return {};
-    },
     onQueryUpdate: function(emitRef, value) {
-      // this.querylocal[emitRef] = this.normalizeQuery(value);
-      console.log(emitRef, JSON.stringify(this.querylocal));
+      this.querylocal[emitRef] = this.normalizeQuery(value);
+      this.$emit("query-update", this.emitRef, this.querylocal);
+      // console.log(emitRef, JSON.stringify(this.querylocal));
     }
     // onQueryUpdate: function(emitRef, value) {
     //   this.querylocal = this.normalizeQuery(value);

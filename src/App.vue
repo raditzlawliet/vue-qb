@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <dynamic-selector ref="foo" :query="query" @query-update="onQueryUpdate">
-      <div style="font-weight: bold;" slot="f-trim-begin">TRIM</div>
+      <div style="font-weight: bold;" slot="f-trim-begin">TRIM CUSTOM</div>
+      <div style="font-weight: bold;" slot="f-trim-end">END OF TRIM</div>
     </dynamic-selector>
     <button @click="generateSQL">Print SQL</button>
     <p>{{ generatedSQL }}</p>
