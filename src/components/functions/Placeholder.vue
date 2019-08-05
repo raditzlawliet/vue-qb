@@ -34,7 +34,7 @@ export default {
     emitRef: {
       type: String,
       default: "value"
-    }
+    },
   },
   watch: {
     querylocal: {

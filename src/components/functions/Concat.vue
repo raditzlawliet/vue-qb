@@ -1,22 +1,34 @@
 <template>
   <div class="selector">
     <slot name="f-concat-begin">
-      <span>CONCAT [</span>
+      <label>CONCAT (</label>
     </slot>
-    <button @click="add">+</button>
-    <div v-for="(item, index) in querylocal.values" :key="index">
+    <button class="btn btn-success btn-sm ml-2" @click="add">+</button>
+    <div v-for="(item, index) in querylocal.values" :key="index" class="row">
       <slot name="f-concat-value">
-        <button v-show="index != 0" @click="remove(index)">X</button>
-        <dynamic-selector :ref="`value_`" :query="item.value" @query-update="onQueryUpdate">
-          <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-          <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-            <slot :name="name" v-bind="slotData" />
-          </template>
-        </dynamic-selector>
+        <div class="col-md-12 d-flex flex-row">
+          <div>
+            <button class="btn btn-danger btn-sm" :disabled="index == 0" @click="remove(index)">X</button>
+          </div>
+          <div class="flex-grow-1">
+            <dynamic-selector
+              ref="values_"
+              :emitRef="`values_${index}`"
+              :query="item"
+              @query-update="onQueryUpdate"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
+          <label class="ml-2">,</label>
+        </div>
       </slot>
     </div>
     <slot name="f-concat-end">
-      <span>]</span>
+      <label>)</label>
     </slot>
   </div>
 </template>
@@ -41,7 +53,7 @@ export default {
         .map((v, i) => {
           // console.log(this.$refs.value_[i], i);
           // dont know why ref already scope in array
-          return this.$refs.value_[i] ? this.$refs.value_[i].generateSQL() : "";
+          return this.$refs.values_[i] ? this.$refs.values_[i].generateSQL() : "";
         })
         .join(", ");
       return `CONCAT (${values})`;
@@ -54,6 +66,16 @@ export default {
     },
     remove: function(i) {
       this.querylocal.values.splice(i, 1);
+    },
+    onQueryUpdate: function(emitRef, value) {
+      if (emitRef.startsWith("values_")) {
+        let index = emitRef.split("_").pop();
+        this.querylocal.values[index] = this.normalizeQuery(value);
+      } else {
+        this.querylocal[emitRef] = this.normalizeQuery(value);
+      }
+      this.$emit("query-update", this.emitRef, this.querylocal);
+      // console.log(emitRef, JSON.stringify(this.querylocal));
     }
   }
 };

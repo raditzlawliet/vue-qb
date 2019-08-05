@@ -1,10 +1,15 @@
 <template>
   <div class="selector">
     <slot name="f-trim-begin">
-      <span>TRIM (</span>
+      <label>TRIM (</label>
     </slot>
     <slot name="f-trim-value">
-      <dynamic-selector ref="value" emitRef="value" :query="querylocal.value" @query-update="onQueryUpdate">
+      <dynamic-selector
+        ref="value"
+        emitRef="value"
+        :query="querylocal.value"
+        @query-update="onQueryUpdate"
+      >
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
           <slot :name="name" v-bind="slotData" />
@@ -12,7 +17,7 @@
       </dynamic-selector>
     </slot>
     <slot name="f-trim-end">
-      <span>)</span>
+      <label>)</label>
     </slot>
   </div>
 </template>
@@ -28,7 +33,7 @@ export default {
   methods: {
     generateSQL: function() {
       return `TRIM (${this.$refs.value.generateSQL()})`;
-    },
+    }
   }
 };
 </script>

@@ -1,12 +1,30 @@
 <template>
-  <div id="app">
-    <dynamic-selector ref="foo" :query="query" @query-update="onQueryUpdate">
-      <div style="font-weight: bold;" slot="f-trim-begin">TRIM CUSTOM</div>
-      <div style="font-weight: bold;" slot="f-trim-end">END OF TRIM</div>
-    </dynamic-selector>
-    <button @click="generateSQL">Print SQL</button>
-    <p>{{ generatedSQL }}</p>
-    <p>{{ generatedJSON }}</p>
+  <div class="container-fluid" id="app">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Vue Query Builder</h1>
+        <div>
+          <hr />
+          <dynamic-selector ref="foo" :query="query" @query-update="onQueryUpdate"></dynamic-selector>
+          <hr />
+          <button class="btn btn-success" @click="generateSQL">Print SQL</button>
+          <hr />
+          <code>{{ generatedSQL }}</code>
+          <hr />
+          <code>{{ generatedJSON }}</code>
+        </div>
+        <div>
+          <hr />
+          <dynamic-selector ref="foo" :query="query2" @query-update="onQueryUpdate2"></dynamic-selector>
+          <hr />
+          <button class="btn btn-success" @click="generateSQL2">Print SQL</button>
+          <hr />
+          <code>{{ generatedSQL2 }}</code>
+          <hr />
+          <code>{{ generatedJSON2 }}</code>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +37,8 @@ export default {
     return {
       generatedSQL: "",
       generatedJSON: "",
+      generatedSQL2: "",
+      generatedJSON2: "",
       // query: {
       //   type: "Trim",
       //   value: {
@@ -36,6 +56,21 @@ export default {
           values: [{ type: "", values: [] }],
           value: { type: "Value", values: [], value: "123" }
         }
+      },
+      query2: {
+        type: "Concat",
+        values: [
+          { type: "Value", values: [], value: "123123123" },
+          {
+            type: "Case",
+            values: [
+              {
+                whenValue: { type: "Value", values: [], value: "321321" },
+                thenValue: { type: "", values: [] }
+              }
+            ]
+          }
+        ]
       }
     };
   },
@@ -46,6 +81,13 @@ export default {
     },
     onQueryUpdate: function(refName, q) {
       this.generatedJSON = JSON.stringify(q);
+    },
+    generateSQL2: function() {
+      var x = this.$refs.foo.generateSQL();
+      this.generatedSQL2 = x;
+    },
+    onQueryUpdate2: function(refName, q) {
+      this.generatedJSON2 = JSON.stringify(q);
     }
   },
   mounted() {}
@@ -53,12 +95,15 @@ export default {
 </script>
 
 <style>
-#app {
+label {
+  font-weight: bold;
+}
+/* #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
+} */
 </style>

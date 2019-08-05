@@ -5,9 +5,10 @@ var lFunctions = {
     "Trim": { id: "Trim", component: () => import("@/components/functions/Trim.vue") },
     "Concat": { id: "Concat", component: () => import("@/components/functions/Concat.vue") },
     "Case": { id: "Case", component: () => import("@/components/functions/Case.vue") },
-    "Object": { id: "Object", component: () => import("@/components/functions/Value.vue") },
-    "Attribute": { id: "Attribute", component: () => import("@/components/functions/Value.vue") },
+    "Object": { id: "Object", component: () => import("@/components/functions/Object.vue") },
+    "Attribute": { id: "Attribute", component: () => import("@/components/functions/Object.vue") },
     "Value": { id: "Value", component: () => import("@/components/functions/Value.vue") },
+    // Coming soon
     "Custom": {
         id: "Custom", isTemplate: true, templateOptions: {
             template: 'CUSTOM ( <dynamic-selector ref="param"></dynamic-selector>, <dynamic-selector ref="param2"></dynamic-selector>)',
@@ -23,6 +24,14 @@ var lFunctions = {
 // </template>
 // `
 
+var lObjects = {
+    "Some Object": { id: "Some Object", name: "Some Object" },
+};
+
+var lAttributes = {
+    "Some Attribute": { id: "Some Attribute", name: "Some Attribute" },
+};
+
 // for recursive scope, will include for isTemplate=true
 var recursiveScope = `
 <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -32,5 +41,7 @@ var recursiveScope = `
 
 export default {
     lFunctions,
+    lObjects,
+    lAttributes,
     recursiveScope,
 }

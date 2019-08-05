@@ -1,37 +1,39 @@
 <template>
-  <div class="selector">
-    <component
-      :is="component"
-      :query="querylocal"
-      :emitRef="emitRef"
-      v-if="component && !functionData.isTemplate"
-      ref="elComponent"
-      @query-update="onQueryUpdate"
-    >
-      <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-      <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-        <slot :name="name" v-bind="slotData" />
-      </template>
-    </component>
-    <component
-      :is="component"
-      :query="querylocal"
-      :emitRef="emitRef"
-      v-else-if="component && functionData.isTemplate"
-      ref="elComponent"
-      :templateOptions="functionData.templateOptions"
-      @query-update="onQueryUpdate"
-    >
-      <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-      <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-        <slot :name="name" v-bind="slotData" />
-      </template>
-    </component>
-    <select v-model="querylocal.type" v-else>
-      <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
-    </select>
-    <button v-show="removeable && querylocal.type" @click="remove">X</button>
-  </div>
+  <form v-on:submit.prevent>
+    <div class="form-group selector ml-2">
+      <component
+        :is="component"
+        :query="querylocal"
+        :emitRef="emitRef"
+        v-if="component && !functionData.isTemplate"
+        ref="elComponent"
+        @query-update="onQueryUpdate"
+      >
+        <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+        <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+          <slot :name="name" v-bind="slotData" />
+        </template>
+      </component>
+      <component
+        :is="component"
+        :query="querylocal"
+        :emitRef="emitRef"
+        v-else-if="component && functionData.isTemplate"
+        ref="elComponent"
+        :templateOptions="functionData.templateOptions"
+        @query-update="onQueryUpdate"
+      >
+        <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+        <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+          <slot :name="name" v-bind="slotData" />
+        </template>
+      </component>
+      <select class="form-control form-control-sm" v-model="querylocal.type" v-else>
+        <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
+      </select>
+      <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button>
+    </div>
+  </form>
 </template>
 <script>
 import global from "@/global.js";
