@@ -13,15 +13,17 @@
           <hr />
           <code>{{ generatedJSON }}</code>
         </div>
-        <div>
-          <hr />
-          <dynamic-selector ref="foo" :query="query2" @query-update="onQueryUpdate2"></dynamic-selector>
-          <hr />
-          <button class="btn btn-success" @click="generateSQL2">Print SQL</button>
-          <hr />
-          <code>{{ generatedSQL2 }}</code>
-          <hr />
-          <code>{{ generatedJSON2 }}</code>
+        <div class="row">
+          <div class="col-md-6">
+            <hr />
+            <dynamic-selector ref="foo" :query="query2" @query-update="onQueryUpdate2"></dynamic-selector>
+            <hr />
+            <button class="btn btn-success" @click="generateSQL2">Print SQL</button>
+            <hr />
+            <code>{{ generatedSQL2 }}</code>
+            <hr />
+            <code>{{ generatedJSON2 }}</code>
+          </div>
         </div>
       </div>
     </div>
