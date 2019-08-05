@@ -19,14 +19,23 @@ export default {
     return {
       generatedSQL: "",
       generatedJSON: "",
+      // query: {
+      //   type: "Trim",
+      //   value: {
+      //     type: "Concat",
+      //     value: {
+      //       type: ""
+      //     }
+      //   }
+      // }
       query: {
-        // type: "Trim",
-        // value: {
-        //   type: "Concat",
-        //   value: {
-        //     type: ""
-        //   }
-        // }
+        type: "Trim",
+        values: [],
+        value: {
+          type: "Concat",
+          values: [{ type: "", values: [] }],
+          value: { type: "Value", values: [], value: "123" }
+        }
       }
     };
   },
