@@ -1,29 +1,27 @@
-# vue-query-builder
+# Vue QB (Query Builder)
+-- 
 
-## Project setup
-```
-npm install
-```
+## Feature (Coming Soon)
+- Basic SQL Query Builder
+    - Functions (Selector)
+    - Nested Selector
+    - Comparator Group
+    - Object/Table selection
+    - Attribute/Column selection
+    - Import/Export to JSON
+    - Generate to SQL
+- Nested SQL
+- UNION SQL
+- Customize and Extendable SQL Parts
+- Support Template
+- Support Multiple Language
+- Generator Dynamic Selector
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Contribute
+[WIP] Feel free to contribute, don't forget to mention if needed.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## License
+MIT License
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Author and Contributor
+Radityo
