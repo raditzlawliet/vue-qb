@@ -8,6 +8,7 @@
         v-if="component && !functionData.isTemplate"
         ref="elComponent"
         @query-update="onQueryUpdate"
+        @remove="componentOnRemove"
       >
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -22,6 +23,7 @@
         ref="elComponent"
         :templateOptions="functionData.templateOptions"
         @query-update="onQueryUpdate"
+        @remove="componentOnRemove"
       >
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -31,7 +33,7 @@
       <select class="form-control form-control-sm" v-model="querylocal.type" v-else>
         <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
       </select>
-      <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button>
+      <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
     </div>
   </form>
 </template>
@@ -94,12 +96,12 @@ export default {
       if (this.$refs.elComponent) return this.$refs.elComponent.generateSQL();
       return "";
     },
-    remove: function() {
-      // this.querylocal.type = "";
+    // remove: function() {
+    //   // this.querylocal.type = "";
+    //   this.querylocal = this.getQueryModel();
+    // },
+    componentOnRemove: function() {
       this.querylocal = this.getQueryModel();
-    },
-    removeable: function() {
-      return true;
     },
     onQueryUpdate: function(emitRef, value) {
       this.querylocal = this.normalizeQuery(value);

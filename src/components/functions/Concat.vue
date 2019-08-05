@@ -3,12 +3,12 @@
     <slot name="f-concat-begin">
       <label>CONCAT (</label>
     </slot>
-    <button class="btn btn-success btn-sm ml-2" @click="add">+</button>
+    <button class="btn btn-success btn-sm ml-2" @click="addItem">+</button>
     <div v-for="(item, index) in querylocal.values" :key="index" class="row">
       <slot name="f-concat-value">
         <div class="col-md-12 d-flex flex-row">
           <div>
-            <button class="btn btn-danger btn-sm" :disabled="index == 0" @click="remove(index)">X</button>
+            <button class="btn btn-danger btn-sm" :disabled="index == 0" @click="removeItem(index)">X</button>
           </div>
           <div class="flex-grow-1">
             <dynamic-selector
@@ -30,6 +30,11 @@
     <slot name="f-concat-end">
       <label>)</label>
     </slot>
+    <button
+      class="btn btn-danger btn-sm ml-2"
+      v-show="optionslocal.removeable && querylocal.type"
+      @click="remove"
+    >X</button>
   </div>
 </template>
 <script>
@@ -53,7 +58,9 @@ export default {
         .map((v, i) => {
           // console.log(this.$refs.value_[i], i);
           // dont know why ref already scope in array
-          return this.$refs.values_[i] ? this.$refs.values_[i].generateSQL() : "";
+          return this.$refs.values_[i]
+            ? this.$refs.values_[i].generateSQL()
+            : "";
         })
         .join(", ");
       return `CONCAT (${values})`;
@@ -61,10 +68,10 @@ export default {
     // onQueryUpdate: function(q) {
     //   this.querylocal.value = this.normalizeQuery(q);
     // },s
-    add: function() {
+    addItem: function() {
       this.querylocal.values.push(this.getQueryModel());
     },
-    remove: function(i) {
+    removeItem: function(i) {
       this.querylocal.values.splice(i, 1);
     },
     onQueryUpdate: function(emitRef, value) {

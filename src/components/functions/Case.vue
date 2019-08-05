@@ -3,12 +3,12 @@
     <slot name="f-case-begin">
       <label>CASE</label>
     </slot>
-    <button class="btn btn-success btn-sm ml-2" @click="add">+</button>
-    <div v-for="(whenThen, index) in querylocal.values" :key="index">
+    <button class="btn btn-success btn-sm ml-2" @click="addItem">+</button>
+    <div v-for="(whenThen, index) in querylocal.values" :key="index" class="ml-2">
       <slot name="f-case-when-then">
         <div class="d-flex d-flex-row">
           <div>
-            <button class="btn btn-danger btn-sm mr-2" v-show="index != 0" @click="remove(index)">X</button>
+            <button class="btn btn-danger btn-sm mr-2" v-show="index != 0" @click="removeItem(index)">X</button>
           </div>
           <div class="flex-grow-1">
             <label>WHEN</label>
@@ -42,22 +42,29 @@
       </slot>
     </div>
     <slot name="f-case-else">
-      <label>ELSE</label>
-      <dynamic-selector
-        ref="elseValue"
-        emitRef="elseValue"
-        :query="querylocal.elseValue"
-        @query-update="onQueryUpdate"
-      >
-        <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-        <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-          <slot :name="name" v-bind="slotData" />
-        </template>
-      </dynamic-selector>
+      <div class="ml-2">
+        <label>ELSE</label>
+        <dynamic-selector
+          ref="elseValue"
+          emitRef="elseValue"
+          :query="querylocal.elseValue"
+          @query-update="onQueryUpdate"
+        >
+          <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+          <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+            <slot :name="name" v-bind="slotData" />
+          </template>
+        </dynamic-selector>
+      </div>
     </slot>
     <slot name="f-case-end">
       <label>END</label>
     </slot>
+    <button
+      class="btn btn-danger btn-sm ml-2"
+      v-show="optionslocal.removeable && querylocal.type"
+      @click="remove"
+    >X</button>
   </div>
 </template>
 <script>
@@ -108,17 +115,17 @@ export default {
     // onQueryUpdate: function(emitRef, value) {
     //   this.querylocal[emitRef] = this.normalizeQuery(value);
     // }
-    add: function() {
+    addItem: function() {
       this.querylocal.values.push({
         whenValue: this.getQueryModel(),
         thenValue: this.getQueryModel()
       });
     },
-    remove: function(i) {
+    removeItem: function(i) {
       this.querylocal.values.splice(i, 1);
     },
     onQueryUpdate: function(emitRef, value) {
-      console.log(emitRef)
+      console.log(emitRef);
       if (emitRef.startsWith("whenValue_")) {
         let index = emitRef.split("_").pop();
         this.querylocal.values[index].whenValue = this.normalizeQuery(value);

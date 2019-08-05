@@ -1,6 +1,7 @@
 <template>
-  <div class="selector">
-    <input class="form-control form-control-sm" v-model="querylocal.value" />
+  <div class="selector d-flex">
+    <input class="form-control form-control-sm flex-grow-1" v-model="querylocal.value" />
+    <button class="btn btn-danger btn-sm ml-2" v-show="optionslocal.removeable && querylocal.type" @click="remove">X</button>
   </div>
 </template>
 <script>

@@ -12,6 +12,12 @@
 import global from "@/global.js";
 export default {
   props: {
+    options: {
+      type: Object,
+      default: function() {
+        return { removeable: true };
+      }
+    },
     templateOptions: {
       type: Object,
       default: () => {
@@ -34,7 +40,7 @@ export default {
     emitRef: {
       type: String,
       default: "value"
-    },
+    }
   },
   watch: {
     querylocal: {
@@ -47,7 +53,8 @@ export default {
   },
   data() {
     return {
-      querylocal: this.normalizeQuery(this.query)
+      querylocal: this.normalizeQuery(this.query),
+      optionslocal: this.normalizeOptions(this.options)
     };
   },
   mounted() {},
@@ -85,6 +92,14 @@ export default {
     }
   },
   methods: {
+    normalizeOptions: function(d) {
+      return Object.assign(this.defaultOptions, d);
+    },
+    defaultOptions: function() {
+      return {
+        removeable: true
+      };
+    },
     normalizeQuery: function(d) {
       return Object.assign(
         {
@@ -124,6 +139,9 @@ export default {
       this.querylocal[emitRef] = this.normalizeQuery(value);
       this.$emit("query-update", this.emitRef, this.querylocal);
       // console.log(emitRef, JSON.stringify(this.querylocal));
+    },
+    remove: function() {
+      this.$emit("remove");
     }
     // onQueryUpdate: function(emitRef, value) {
     //   this.querylocal = this.normalizeQuery(value);

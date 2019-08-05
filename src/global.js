@@ -6,7 +6,7 @@ var lFunctions = {
     "Concat": { id: "Concat", component: () => import("@/components/functions/Concat.vue") },
     "Case": { id: "Case", component: () => import("@/components/functions/Case.vue") },
     "Object": { id: "Object", component: () => import("@/components/functions/Object.vue") },
-    "Attribute": { id: "Attribute", component: () => import("@/components/functions/Object.vue") },
+    "Attribute": { id: "Attribute", component: () => import("@/components/functions/Attribute.vue") },
     "Value": { id: "Value", component: () => import("@/components/functions/Value.vue") },
     // Coming soon
     "Custom": {

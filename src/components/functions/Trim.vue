@@ -19,6 +19,11 @@
     <slot name="f-trim-end">
       <label>)</label>
     </slot>
+    <button
+      class="btn btn-danger btn-sm ml-2"
+      v-show="optionslocal.removeable && querylocal.type"
+      @click="remove"
+    >X</button>
   </div>
 </template>
 <script>

@@ -66,7 +66,11 @@ export default {
             values: [
               {
                 whenValue: { type: "Value", values: [], value: "321321" },
-                thenValue: { type: "", values: [] }
+                thenValue: {
+                  type: "Attribute",
+                  values: [],
+                  value: "Some Attribute"
+                }
               }
             ]
           }
