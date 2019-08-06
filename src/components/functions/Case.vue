@@ -76,10 +76,10 @@ export default {
     return {};
   },
   created() {
-    if (this.querylocal.values.length == 0) this.add();
+    if (this.querylocal.values.length == 0) this.addItem();
   },
   updated() {
-    if (this.querylocal.values.length == 0) this.add();
+    if (this.querylocal.values.length == 0) this.addItem();
   },
   methods: {
     generateSQL: function() {
@@ -125,7 +125,7 @@ export default {
       this.querylocal.values.splice(i, 1);
     },
     onQueryUpdate: function(emitRef, value) {
-      console.log(emitRef);
+      // console.log(emitRef);
       if (emitRef.startsWith("whenValue_")) {
         let index = emitRef.split("_").pop();
         this.querylocal.values[index].whenValue = this.normalizeQuery(value);

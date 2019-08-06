@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import global from "@/global.js";
+import globalSettings from "@/components/globalSettings.js";
 export default {
   props: {
     options: {
@@ -80,14 +80,14 @@ export default {
       const div = document.createElement("div");
       div.insertAdjacentHTML("afterbegin", this.templateOptions.template);
       Array.from(div.querySelectorAll("dynamic-selector")).forEach(el => {
-        el.insertAdjacentHTML("afterbegin", global.recursiveScope);
+        el.insertAdjacentHTML("afterbegin", globalSettings.recursiveScope);
       });
-      Object.keys(global.lFunctions).forEach(id => {
-        if (!id) return;
-        Array.from(div.querySelectorAll(`f-${id}`)).forEach(el => {
-          el.insertAdjacentHTML("afterbegin", global.recursiveScope);
-        });
-      });
+      // Object.keys(globalFunctions.lFunctions).forEach(id => {
+      //   if (!id) return;
+      //   Array.from(div.querySelectorAll(`f-${id}`)).forEach(el => {
+      //     el.insertAdjacentHTML("afterbegin", globalFunctions.recursiveScope);
+      //   });
+      // });
       return `<div>${div.innerHTML}</div>`;
     }
   },

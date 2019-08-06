@@ -8,7 +8,8 @@ import DynamicSelector from "@/components/DynamicSelector.vue";
 // import FValue from "./functions/Value.vue";
 // import FCase from "./functions/Case.vue";
 
-import global from "@/global.js";
+import globalFunctions from "@/components/globalFunctions.js";
+import globalSettings from "@/components/globalSettings.js";
 
 const Components = {
     // FlockBanner,
@@ -24,14 +25,15 @@ Object.keys(Components).forEach(name => {
     Vue.component(name, Components[name]);
 });
 
-Object.keys(global.lFunctions).forEach(name => {
-    if (name && global.lFunctions[name].component && !global.lFunctions[name].isCustom) {
-        console.log('Register Component', "F" + name)
-        Vue.component("F" + name, global.lFunctions[name].component);
+Object.keys(globalFunctions.lFunctions).forEach(name => {
+    if (name && globalFunctions.lFunctions[name].component && !globalFunctions.lFunctions[name].isCustom) {
+        // console.log('Register Component', "F" + name)
+        Vue.component("F" + name, globalFunctions.lFunctions[name].component);
     }
 });
 
 export default {
     Components,
-    global,
+    globalFunctions,
+    globalSettings,
 };

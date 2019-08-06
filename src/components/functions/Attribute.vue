@@ -12,14 +12,14 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
-import global from "@/global.js";
+import globalSettings from "@/components/globalSettings.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
     return {
-      lAttributes: global.lAttributes
+      lAttributes: globalSettings.lAttributes
     };
   },
   methods: {

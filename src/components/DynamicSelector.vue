@@ -38,7 +38,7 @@
   </form>
 </template>
 <script>
-import global from "@/global.js";
+import globalFunctions from "@/components/globalFunctions.js";
 import Placeholder from "./functions/Placeholder.vue";
 
 export default {
@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      lFunctions: global.lFunctions,
+      lFunctions: globalFunctions.lFunctions,
       component: null,
       functionData: {}
     };
