@@ -1,6 +1,6 @@
 <template>
   <form v-on:submit.prevent>
-    <div class="form-group selector ml-2">
+    <div class="selector form-group ml-2">
       <component
         :is="component"
         :query="querylocal"
@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      lFunctions: globalFunctions.lFunctions,
+      lFunctions: globalFunctions,
       component: null,
       functionData: {}
     };

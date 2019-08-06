@@ -82,10 +82,10 @@ export default {
       Array.from(div.querySelectorAll("dynamic-selector")).forEach(el => {
         el.insertAdjacentHTML("afterbegin", globalSettings.recursiveScope);
       });
-      // Object.keys(globalFunctions.lFunctions).forEach(id => {
+      // Object.keys(globalFunctions).forEach(id => {
       //   if (!id) return;
       //   Array.from(div.querySelectorAll(`f-${id}`)).forEach(el => {
-      //     el.insertAdjacentHTML("afterbegin", globalFunctions.recursiveScope);
+      //     el.insertAdjacentHTML("afterbegin", globalSettings.recursiveScope);
       //   });
       // });
       return `<div>${div.innerHTML}</div>`;

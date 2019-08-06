@@ -25,10 +25,10 @@ Object.keys(Components).forEach(name => {
     Vue.component(name, Components[name]);
 });
 
-Object.keys(globalFunctions.lFunctions).forEach(name => {
-    if (name && globalFunctions.lFunctions[name].component && !globalFunctions.lFunctions[name].isCustom) {
+Object.keys(globalFunctions).forEach(name => {
+    if (name && globalFunctions[name].component && !globalFunctions[name].isCustom) {
         // console.log('Register Component', "F" + name)
-        Vue.component("F" + name, globalFunctions.lFunctions[name].component);
+        Vue.component("F" + name, globalFunctions[name].component);
     }
 });
 
