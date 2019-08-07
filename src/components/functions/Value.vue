@@ -1,7 +1,20 @@
 <template>
-  <div class="selector d-flex">
-    <input class="form-control form-control-sm flex-grow-1" v-model="querylocal.value" />
-    <button class="btn btn-danger btn-sm ml-2" v-show="optionslocal.removeable && querylocal.type" @click="remove">X</button>
+  <div :class="['vue-qb-function', ...normalizedTemplateOptions.functionsWrapperClass]">
+    <div :class="['vue-qb-row', ...normalizedTemplateOptions.rowItemClass]">
+      <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
+        <input
+          :class="['vue-qb-input', ...normalizedTemplateOptions.inputClass]"
+          v-model="querylocal.value"
+        />
+        <button
+          :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+          v-show="optionslocal.removeable && querylocal.type"
+          @click="remove"
+        >
+          <slot name="btn-remove">X</slot>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 <script>

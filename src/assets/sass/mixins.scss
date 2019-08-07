@@ -1,0 +1,38 @@
+// global
+.vue-qb-btn {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.vue-qb-select {
+  min-width: 100px;
+}
+
+.vue-qb-input {
+  min-width: 100px;
+}
+
+.vue-qb-selector {
+  margin-left: 0.5em;
+  clear: both;
+}
+
+.vue-qb-function {
+  min-width: 200px;
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+}
+
+.vue-qb-row-item {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.vue-qb-row {
+  margin-left: 0.5em;
+}
+
+label {
+  font-weight: bold;
+  margin: 0.1em;
+}

@@ -1,14 +1,26 @@
 <template>
-  <div class="selector">
+  <div :class="['vue-qb-function', ...templateOptions.functionsWrapperClass]">
     <slot name="f-concat-begin">
       <label>CONCAT (</label>
     </slot>
-    <button class="btn btn-success btn-sm ml-2" @click="addItem">+</button>
-    <div v-for="(item, index) in querylocal.values" :key="index" class="row">
+    <button :class="['vue-qb-btn', ...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+      <slot name="btn-add">+</slot>
+    </button>
+    <div
+      v-for="(item, index) in querylocal.values"
+      :key="index"
+      :class="['vue-qb-row', ...normalizedTemplateOptions.rowClass]"
+    >
       <slot name="f-concat-value">
-        <div class="col-md-12 d-flex flex-row">
+        <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
           <div>
-            <button class="btn btn-danger btn-sm" :disabled="index == 0" @click="removeItem(index)">X</button>
+            <button
+              :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+              :disabled="index == 0"
+              @click="removeItem(index)"
+            >
+              <slot name="btn-remove">X</slot>
+            </button>
           </div>
           <div class="flex-grow-1">
             <dynamic-selector
@@ -16,6 +28,7 @@
               :emitRef="`values_${index}`"
               :query="item"
               @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -23,7 +36,9 @@
               </template>
             </dynamic-selector>
           </div>
-          <label class="ml-2">,</label>
+          <Slot name="f-concat-separator">
+            <label style="margin-left: 0.5em;">,</label>
+          </slot>
         </div>
       </slot>
     </div>
@@ -31,10 +46,12 @@
       <label>)</label>
     </slot>
     <button
-      class="btn btn-danger btn-sm ml-2"
+      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
-    >X</button>
+    >
+      <slot name="btn-remove">X</slot>
+    </button>
   </div>
 </template>
 <script>

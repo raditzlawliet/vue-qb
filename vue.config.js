@@ -5,5 +5,13 @@ module.exports = {
     //         return args
     //     })
     // },
+    chainWebpack: config => {
+        config.module
+            .rule('expose-loader')
+            .test(/\.expose-loader$/)
+            .use('expose-loader')
+            .loader('expose-loader')
+            .end()
+    },
     runtimeCompiler: true,
 }

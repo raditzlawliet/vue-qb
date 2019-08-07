@@ -1,14 +1,24 @@
 <template>
-  <div class="selector">
+  <div :class="['vue-qb-function', ...templateOptions.functionsWrapperClass]">
     <slot name="f-case-begin">
       <label>CASE</label>
     </slot>
-    <button class="btn btn-success btn-sm ml-2" @click="addItem">+</button>
-    <div v-for="(whenThen, index) in querylocal.values" :key="index" class="ml-2">
+    <button :class="['vue-qb-btn', ...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+      <slot name="btn-add">+</slot>
+    </button>
+    <div
+      v-for="(whenThen, index) in querylocal.values"
+      :key="index"
+      :class="['vue-qb-row', ...normalizedTemplateOptions.rowClass]"
+    >
       <slot name="f-case-when-then">
-        <div class="d-flex d-flex-row">
+        <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
           <div>
-            <button class="btn btn-danger btn-sm mr-2" v-show="index != 0" @click="removeItem(index)">X</button>
+            <button
+              :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+              v-show="index != 0"
+              @click="removeItem(index)"
+            >X</button>
           </div>
           <div class="flex-grow-1">
             <label>WHEN</label>
@@ -17,6 +27,7 @@
               :emitRef="`whenValue_${index}`"
               :query="whenThen.whenValue"
               @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -31,6 +42,7 @@
               :emitRef="`thenValue_${index}`"
               :query="whenThen.thenValue"
               @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -42,13 +54,14 @@
       </slot>
     </div>
     <slot name="f-case-else">
-      <div class="ml-2">
+      <div :class="['vue-qb-row', ...normalizedTemplateOptions.rowClass]">
         <label>ELSE</label>
         <dynamic-selector
           ref="elseValue"
           emitRef="elseValue"
           :query="querylocal.elseValue"
           @query-update="onQueryUpdate"
+          :templateOptions="templateOptions"
         >
           <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
           <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -61,10 +74,12 @@
       <label>END</label>
     </slot>
     <button
-      class="btn btn-danger btn-sm ml-2"
+      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
-    >X</button>
+    >
+      <slot name="btn-remove">X</slot>
+    </button>
   </div>
 </template>
 <script>

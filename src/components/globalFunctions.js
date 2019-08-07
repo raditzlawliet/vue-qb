@@ -7,12 +7,12 @@ var lFunctions = {
     "Attribute": { id: "Attribute", component: () => import("@/components/functions/Attribute.vue") },
     "Value": { id: "Value", component: () => import("@/components/functions/Value.vue") },
     // Coming soon after toposort fixed
-    "Custom": {
-        id: "Custom", isTemplate: true, templateOptions: {
-            template: 'CUSTOM ( <dynamic-selector ref="param"></dynamic-selector>, <dynamic-selector ref="param2"></dynamic-selector>)',
-            generateSQL: 'Custom (#param, #param2)',
-        }
-    }, // f-custom
+    // "Custom": {
+    //     id: "Custom", isTemplate: true, functionOptions: {
+    //         htmlTemplate: 'CUSTOM ( <dynamic-selector ref="param"></dynamic-selector>, <dynamic-selector ref="param2"></dynamic-selector>)',
+    //         generateSQL: 'Custom (#param, #param2)',
+    //     }
+    // }, // f-custom
 };
 
 export default lFunctions

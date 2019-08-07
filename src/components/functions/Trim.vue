@@ -1,5 +1,5 @@
 <template>
-  <div class="selector">
+  <div :class="['vue-qb-function', ...normalizedTemplateOptions.functionsWrapperClass]">
     <slot name="f-trim-begin">
       <label>TRIM (</label>
     </slot>
@@ -9,6 +9,7 @@
         emitRef="value"
         :query="querylocal.value"
         @query-update="onQueryUpdate"
+        :templateOptions="templateOptions"
       >
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -20,10 +21,12 @@
       <label>)</label>
     </slot>
     <button
-      class="btn btn-danger btn-sm ml-2"
+      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
-    >X</button>
+    >
+      <slot name="btn-remove">X</slot>
+    </button>
   </div>
 </template>
 <script>
@@ -33,7 +36,9 @@ export default {
   extends: Placeholder,
   props: {},
   data() {
-    return {};
+    return {
+      templateId: "trim"
+    };
   },
   methods: {
     generateSQL: function() {

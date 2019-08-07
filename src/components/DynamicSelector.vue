@@ -1,6 +1,6 @@
 <template>
   <form v-on:submit.prevent>
-    <div class="selector form-group ml-2">
+    <div :class="['vue-qb-selector', ...normalizedTemplateOptions.selectorWrapperClass]">
       <component
         :is="component"
         :query="querylocal"
@@ -9,6 +9,7 @@
         ref="elComponent"
         @query-update="onQueryUpdate"
         @remove="componentOnRemove"
+        :templateOptions="templateOptions"
       >
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -21,16 +22,21 @@
         :emitRef="emitRef"
         v-else-if="component && functionData.isTemplate"
         ref="elComponent"
-        :templateOptions="functionData.templateOptions"
+        :functionOptions="functionData.functionOptions"
         @query-update="onQueryUpdate"
         @remove="componentOnRemove"
+        :templateOptions="templateOptions"
       >
         <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
         <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
           <slot :name="name" v-bind="slotData" />
         </template>
       </component>
-      <select class="form-control form-control-sm" v-model="querylocal.type" v-else>
+      <select
+        :class="['vue-qb-select', ...normalizedTemplateOptions.selectClass]"
+        v-model="querylocal.type"
+        v-else
+      >
         <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
       </select>
       <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
@@ -112,5 +118,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "../assets/sass/mixins.scss";
 </style>

@@ -1,13 +1,22 @@
 <template>
-  <div class="selector d-flex">
-    <select class="form-control form-control-sm flex-grow-1" v-model="querylocal.value">
-      <option v-for="o in lAttributes" :key="o.id" :value="o.id">{{o.name}}</option>
-    </select>
-    <button
-      class="btn btn-danger btn-sm ml-2"
-      v-show="optionslocal.removeable && querylocal.type"
-      @click="remove"
-    >X</button>
+  <div :class="['vue-qb-function', ...templateOptions.functionsWrapperClass]">
+    <div :class="['vue-qb-row', ...normalizedTemplateOptions.rowItemClass]">
+      <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
+        <select
+          :class="['vue-qb-select', ...normalizedTemplateOptions.selectClass]"
+          v-model="querylocal.value"
+        >
+          <option v-for="o in lAttributes" :key="o.id" :value="o.id">{{o.name}}</option>
+        </select>
+        <button
+          :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+          v-show="optionslocal.removeable && querylocal.type"
+          @click="remove"
+        >
+          <slot name="btn-remove">X</slot>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 <script>

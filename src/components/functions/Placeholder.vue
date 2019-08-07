@@ -1,28 +1,88 @@
 <template>
-  <div class="functions">
-    <component :is="{template:templateWithWrapper}" ref="placeholder">
+  <div :class="['vue-qb-function', ...normalizedTemplateOptions.functionsWrapperClass]">
+    <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder">
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
         <slot :name="name" v-bind="slotData" />
       </template>
     </component>
+    <button
+      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+      v-show="optionslocal.removeable && querylocal.type"
+      @click="remove"
+    >
+      <slot name="btn-remove">X</slot>
+    </button>
   </div>
 </template>
 <script>
 import globalSettings from "@/components/globalSettings.js";
+
+var defaultOptions = function() {
+  return {
+    removeable: true
+  };
+};
+
+var defaultTemplateOptions = function() {
+  return {
+    template: "",
+    options: {
+      // all
+      "": {
+        selectorWrapperClass: [],
+        functionsWrapperClass: [],
+        buttonClass: []
+      },
+      // spesific
+      value: {
+        selectorWrapperClass: [],
+        functionsWrapperClass: [],
+        buttonClass: []
+      }
+    }
+  };
+};
+
+var originalTemplateOptions = {
+  // bootstrap 4
+  bs4: {
+    selectorWrapperClass: ["form-group", "ml-2"],
+    functionsWrapperClass: [],
+    removeBtnClass: ["btn btn-danger btn-sm ml-2"],
+    addBtnClass: ["btn btn-success btn-sm ml-2"],
+    inputClass: ["form-control form-control-sm flex-grow-1"],
+    selectClass: ["form-control form-control-sm flex-grow-1"],
+    rowClass: ["row"],
+    rowItemClass: ["col-md-12 d-flex flex-row"]
+  },
+  bs3: {
+    selectorWrapperClass: [""],
+    functionsWrapperClass: [""],
+    removeBtnClass: ["btn btn-danger btn-xs ml-2"],
+    addBtnClass: ["btn btn-success btn-xs ml-2"],
+    inputClass: ["form-control form-control-xs flex-grow-1"],
+    selectClass: ["form-control form-control-xs flex-grow-1"],
+    rowClass: ["row"],
+    rowItemClass: ["col-md-12 d-flex flex-row"]
+  }
+};
+
 export default {
   props: {
     options: {
       type: Object,
-      default: function() {
-        return { removeable: true };
-      }
+      default: defaultOptions
     },
     templateOptions: {
       type: Object,
+      default: defaultTemplateOptions
+    },
+    functionOptions: {
+      type: Object,
       default: () => {
         return {
-          template: '<dynamic-selector ref="val"></dynamic-selector>',
+          htmlTemplate: '<dynamic-selector ref="val"></dynamic-selector>',
           generateSQL: "#val"
         };
       }
@@ -53,6 +113,7 @@ export default {
   },
   data() {
     return {
+      templateId: "placeholder",
       querylocal: this.normalizeQuery(this.query),
       optionslocal: this.normalizeOptions(this.options)
     };
@@ -71,14 +132,14 @@ export default {
     //   );
     // },
     generateSQLNodes() {
-      if (this.templateOptions.generateSQL)
-        return this.templateOptions.generateSQL.split(/#([\w]+)/);
+      if (this.functionOptions.generateSQL)
+        return this.functionOptions.generateSQL.split(/#([\w]+)/);
       return [];
     },
-    templateWithWrapper() {
+    htmlTemplateWithWrapper() {
       // insert recursiveScope dari global ke dynamic-selector dan f- tag lainnya yg terdaftar
       const div = document.createElement("div");
-      div.insertAdjacentHTML("afterbegin", this.templateOptions.template);
+      div.insertAdjacentHTML("afterbegin", this.functionOptions.htmlTemplate);
       Array.from(div.querySelectorAll("dynamic-selector")).forEach(el => {
         el.insertAdjacentHTML("afterbegin", globalSettings.recursiveScope);
       });
@@ -89,16 +150,33 @@ export default {
       //   });
       // });
       return `<div>${div.innerHTML}</div>`;
+    },
+    normalizedTemplateOptions: function() {
+      var coreOptions = {};
+      if (
+        this.templateOptions.template == "bs4" ||
+        this.templateOptions.template == "bs3"
+      ) {
+        coreOptions = originalTemplateOptions[this.templateOptions.template];
+      }
+      var globalOptions = this.templateOptions.options
+        ? this.templateOptions.options[""]
+        : {};
+      var specOptions = this.templateOptions.options
+        ? this.templateOptions.options[this.templateId]
+        : {};
+
+      specOptions = specOptions || {};
+      globalOptions = globalOptions || {};
+
+      var newOptions = Object.assign(specOptions, globalOptions, coreOptions);
+
+      return newOptions;
     }
   },
   methods: {
     normalizeOptions: function(d) {
-      return Object.assign(this.defaultOptions, d);
-    },
-    defaultOptions: function() {
-      return {
-        removeable: true
-      };
+      return Object.assign(defaultOptions(), d);
     },
     normalizeQuery: function(d) {
       return Object.assign(
@@ -149,5 +227,5 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 </style>

@@ -5,7 +5,12 @@
         <h1>Vue Query Builder</h1>
         <div>
           <hr />
-          <dynamic-selector ref="foo" :query="query" @query-update="onQueryUpdate"></dynamic-selector>
+          <dynamic-selector
+            ref="foo"
+            :query="query"
+            @query-update="onQueryUpdate"
+            :templateOptions="templateOptions"
+          ></dynamic-selector>
           <hr />
           <button class="btn btn-success" @click="generateSQL">Print SQL</button>
           <hr />
@@ -16,7 +21,12 @@
         <div class="row">
           <div class="col-md-6">
             <hr />
-            <dynamic-selector ref="foo" :query="query2" @query-update="onQueryUpdate2"></dynamic-selector>
+            <dynamic-selector
+              ref="foo"
+              :query="query2"
+              @query-update="onQueryUpdate2"
+              :templateOptions="templateOptions2"
+            ></dynamic-selector>
             <hr />
             <button class="btn btn-success" @click="generateSQL2">Print SQL</button>
             <hr />
@@ -41,6 +51,12 @@ export default {
       generatedJSON: "",
       generatedSQL2: "",
       generatedJSON2: "",
+      templateOptions: {
+        template: "bs4"
+      },
+      templateOptions2: {
+        template: ""
+      },
       // query: {
       //   type: "Trim",
       //   value: {
