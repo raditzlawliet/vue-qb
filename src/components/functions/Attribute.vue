@@ -1,21 +1,16 @@
 <template>
-  <div :class="['vue-qb-function', ...templateOptions.functionsWrapperClass]">
-    <div :class="['vue-qb-row', ...normalizedTemplateOptions.rowItemClass]">
-      <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
-        <select
-          :class="['vue-qb-select', ...normalizedTemplateOptions.selectClass]"
-          v-model="querylocal.value"
-        >
-          <option v-for="o in lAttributes" :key="o.id" :value="o.id">{{o.name}}</option>
-        </select>
-        <button
-          :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
-          @click="remove"
-        >
-          <slot name="btn-remove">X</slot>
-        </button>
-      </div>
+  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
+    <div :class="[...normalizedTemplateOptions.rowItemClass]">
+      <select :class="[...normalizedTemplateOptions.selectClass]" v-model="querylocal.value">
+        <option v-for="o in lAttributes" :key="o.id" :value="o.id">{{o.name}}</option>
+      </select>
+      <button
+        :class="[...normalizedTemplateOptions.removeBtnClass]"
+        v-show="optionslocal.removeable && querylocal.type"
+        @click="remove"
+      >
+        <slot name="btn-remove">X</slot>
+      </button>
     </div>
   </div>
 </template>

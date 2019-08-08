@@ -1,28 +1,28 @@
 <template>
-  <div :class="['vue-qb-function', ...templateOptions.functionsWrapperClass]">
+  <div :class="[...templateOptions.functionsWrapperClass]">
     <slot name="f-concat-begin">
       <label>CONCAT (</label>
     </slot>
-    <button :class="['vue-qb-btn', ...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+    <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
       <slot name="btn-add">+</slot>
     </button>
     <div
       v-for="(item, index) in querylocal.values"
       :key="index"
-      :class="['vue-qb-row', ...normalizedTemplateOptions.rowClass]"
+      :class="[...normalizedTemplateOptions.rowClass]"
     >
       <slot name="f-concat-value">
-        <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
+        <div :class="[...normalizedTemplateOptions.rowItemClass]">
           <div>
             <button
-              :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+              :class="[...normalizedTemplateOptions.removeBtnClass]"
               :disabled="index == 0"
               @click="removeItem(index)"
             >
               <slot name="btn-remove">X</slot>
             </button>
           </div>
-          <div class="flex-grow-1">
+          <div :class="[...normalizedTemplateOptions.columnGrowClass]">
             <dynamic-selector
               ref="values_"
               :emitRef="`values_${index}`"
@@ -46,7 +46,7 @@
       <label>)</label>
     </slot>
     <button
-      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+      :class="[...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
     >
@@ -64,10 +64,10 @@ export default {
     return {};
   },
   created() {
-    if (this.querylocal.values.length == 0) this.add();
+    if (this.querylocal.values.length == 0) this.addItem();
   },
   updated() {
-    if (this.querylocal.values.length == 0) this.add();
+    if (this.querylocal.values.length == 0) this.addItem();
   },
   methods: {
     generateSQL: function() {

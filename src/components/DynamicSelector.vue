@@ -1,6 +1,6 @@
 <template>
   <form v-on:submit.prevent>
-    <div :class="['vue-qb-selector', ...normalizedTemplateOptions.selectorWrapperClass]">
+    <div :class="[...normalizedTemplateOptions.selectorWrapperClass]">
       <component
         :is="component"
         :query="querylocal"
@@ -33,7 +33,7 @@
         </template>
       </component>
       <select
-        :class="['vue-qb-select', ...normalizedTemplateOptions.selectClass]"
+        :class="[...normalizedTemplateOptions.selectClass]"
         v-model="querylocal.type"
         v-else
       >

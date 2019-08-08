@@ -1,5 +1,5 @@
 <template>
-  <div :class="['vue-qb-function', ...normalizedTemplateOptions.functionsWrapperClass]">
+  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
     <slot name="f-trim-begin">
       <label>TRIM (</label>
     </slot>
@@ -21,7 +21,7 @@
       <label>)</label>
     </slot>
     <button
-      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+      :class="[...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
     >

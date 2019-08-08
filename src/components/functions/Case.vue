@@ -1,26 +1,26 @@
 <template>
-  <div :class="['vue-qb-function', ...templateOptions.functionsWrapperClass]">
+  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
     <slot name="f-case-begin">
       <label>CASE</label>
     </slot>
-    <button :class="['vue-qb-btn', ...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+    <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
       <slot name="btn-add">+</slot>
     </button>
     <div
       v-for="(whenThen, index) in querylocal.values"
       :key="index"
-      :class="['vue-qb-row', ...normalizedTemplateOptions.rowClass]"
+      :class="[...normalizedTemplateOptions.rowClass]"
     >
       <slot name="f-case-when-then">
-        <div :class="['vue-qb-row-item', ...normalizedTemplateOptions.rowItemClass]">
+        <div :class="[...normalizedTemplateOptions.rowItemClass]">
           <div>
             <button
-              :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
-              v-show="index != 0"
+              :class="[...normalizedTemplateOptions.removeBtnClass]"
+              :disabled="index == 0"
               @click="removeItem(index)"
             >X</button>
           </div>
-          <div class="flex-grow-1">
+          <div :class="[...normalizedTemplateOptions.columnGrowClass]">
             <label>WHEN</label>
             <dynamic-selector
               ref="whenValue_"
@@ -35,7 +35,7 @@
               </template>
             </dynamic-selector>
           </div>
-          <div class="flex-grow-1">
+          <div :class="[...normalizedTemplateOptions.columnGrowClass]">
             <label>THEN</label>
             <dynamic-selector
               ref="thenValue_"
@@ -54,7 +54,7 @@
       </slot>
     </div>
     <slot name="f-case-else">
-      <div :class="['vue-qb-row', ...normalizedTemplateOptions.rowClass]">
+      <div :class="[...normalizedTemplateOptions.rowClass]">
         <label>ELSE</label>
         <dynamic-selector
           ref="elseValue"
@@ -74,7 +74,7 @@
       <label>END</label>
     </slot>
     <button
-      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+      :class="[...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
     >

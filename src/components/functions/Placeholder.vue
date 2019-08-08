@@ -1,5 +1,5 @@
 <template>
-  <div :class="['vue-qb-function', ...normalizedTemplateOptions.functionsWrapperClass]">
+  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
     <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder">
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -7,7 +7,7 @@
       </template>
     </component>
     <button
-      :class="['vue-qb-btn', ...normalizedTemplateOptions.removeBtnClass]"
+      :class="[...normalizedTemplateOptions.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
     >
@@ -46,6 +46,17 @@ var defaultTemplateOptions = function() {
 
 var originalTemplateOptions = {
   // bootstrap 4
+  "": {
+    selectorWrapperClass: ["vue-qb-selector"],
+    functionsWrapperClass: ["vue-qb-function"],
+    removeBtnClass: ["vue-qb-btn"],
+    addBtnClass: ["vue-qb-btn"],
+    inputClass: ["vue-qb-input"],
+    selectClass: ["vue-qb-select"],
+    rowClass: ["vue-qb-row"],
+    rowItemClass: ["vue-qb-row-item"],
+    columnGrowClass: ["flex-grow-1"]
+  },
   bs4: {
     selectorWrapperClass: ["form-group", "ml-2"],
     functionsWrapperClass: [],
@@ -54,7 +65,8 @@ var originalTemplateOptions = {
     inputClass: ["form-control form-control-sm flex-grow-1"],
     selectClass: ["form-control form-control-sm flex-grow-1"],
     rowClass: ["row"],
-    rowItemClass: ["col-md-12 d-flex flex-row"]
+    rowItemClass: ["col-md-12 d-flex flex-row"],
+    columnGrowClass: ["flex-grow-1"]
   },
   bs3: {
     selectorWrapperClass: [""],
@@ -64,7 +76,8 @@ var originalTemplateOptions = {
     inputClass: ["form-control form-control-xs flex-grow-1"],
     selectClass: ["form-control form-control-xs flex-grow-1"],
     rowClass: ["row"],
-    rowItemClass: ["col-md-12 d-flex flex-row"]
+    rowItemClass: ["col-md-12 d-flex flex-row"],
+    columnGrowClass: ["flex-grow-1"]
   }
 };
 
@@ -154,8 +167,9 @@ export default {
     normalizedTemplateOptions: function() {
       var coreOptions = {};
       if (
-        this.templateOptions.template == "bs4" ||
-        this.templateOptions.template == "bs3"
+        Object.keys(originalTemplateOptions).includes(
+          this.templateOptions.template
+        )
       ) {
         coreOptions = originalTemplateOptions[this.templateOptions.template];
       }
