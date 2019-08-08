@@ -1,15 +1,15 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
-    <div :class="[...normalizedTemplateOptions.rowItemClass]">
+  <div :class="[...normalizedTemplateOptions.inlineClass]">
+    <div :class="[...normalizedTemplateOptions.columnGrowClass]">
       <input :class="[...normalizedTemplateOptions.inputClass]" v-model="querylocal.value" />
-      <button
-        :class="[...normalizedTemplateOptions.removeBtnClass]"
-        v-show="optionslocal.removeable && querylocal.type"
-        @click="remove"
-      >
-        <slot name="btn-remove">X</slot>
-      </button>
     </div>
+    <button
+      :class="[...normalizedTemplateOptions.removeBtnClass]"
+      v-show="optionslocal.removeable && querylocal.type"
+      @click="remove"
+    >
+      <slot name="btn-remove">X</slot>
+    </button>
   </div>
 </template>
 <script>

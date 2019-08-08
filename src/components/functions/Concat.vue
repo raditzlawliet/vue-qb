@@ -1,11 +1,13 @@
 <template>
-  <div :class="[...templateOptions.functionsWrapperClass]">
-    <slot name="f-concat-begin">
-      <label>CONCAT (</label>
-    </slot>
-    <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
-      <slot name="btn-add">+</slot>
-    </button>
+  <div :class="[...templateOptions.formGroupClass]">
+    <div :class="[...normalizedTemplateOptions.inlineClass]">
+      <slot name="f-concat-begin">
+        <label>CONCAT (</label>
+      </slot>
+      <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+        <slot name="btn-add">+</slot>
+      </button>
+    </div>
     <div
       v-for="(item, index) in querylocal.values"
       :key="index"
@@ -13,7 +15,7 @@
     >
       <slot name="f-concat-value">
         <div :class="[...normalizedTemplateOptions.rowItemClass]">
-          <div>
+          <div :class="[...normalizedTemplateOptions.columnClass]">
             <button
               :class="[...normalizedTemplateOptions.removeBtnClass]"
               :disabled="index == 0"
@@ -36,22 +38,26 @@
               </template>
             </dynamic-selector>
           </div>
-          <Slot name="f-concat-separator">
-            <label style="margin-left: 0.5em;">,</label>
-          </slot>
+          <div :class="[...normalizedTemplateOptions.columnClass]">
+            <slot name="f-concat-separator">
+              <label style="margin-left: 0.5em;">,</label>
+            </slot>
+          </div>
         </div>
       </slot>
     </div>
-    <slot name="f-concat-end">
-      <label>)</label>
-    </slot>
-    <button
-      :class="[...normalizedTemplateOptions.removeBtnClass]"
-      v-show="optionslocal.removeable && querylocal.type"
-      @click="remove"
-    >
-      <slot name="btn-remove">X</slot>
-    </button>
+    <div :class="[...normalizedTemplateOptions.inlineClass]">
+      <slot name="f-concat-end">
+        <label>)</label>
+      </slot>
+      <button
+        :class="[...normalizedTemplateOptions.removeBtnClass]"
+        v-show="optionslocal.removeable && querylocal.type"
+        @click="remove"
+      >
+        <slot name="btn-remove">X</slot>
+      </button>
+    </div>
   </div>
 </template>
 <script>

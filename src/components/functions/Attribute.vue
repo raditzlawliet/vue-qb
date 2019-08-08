@@ -1,17 +1,17 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
-    <div :class="[...normalizedTemplateOptions.rowItemClass]">
+  <div :class="[...normalizedTemplateOptions.inlineClass]">
+    <div :class="[...normalizedTemplateOptions.columnGrowClass]">
       <select :class="[...normalizedTemplateOptions.selectClass]" v-model="querylocal.value">
         <option v-for="o in lAttributes" :key="o.id" :value="o.id">{{o.name}}</option>
       </select>
-      <button
-        :class="[...normalizedTemplateOptions.removeBtnClass]"
-        v-show="optionslocal.removeable && querylocal.type"
-        @click="remove"
-      >
-        <slot name="btn-remove">X</slot>
-      </button>
     </div>
+    <button
+      :class="[...normalizedTemplateOptions.removeBtnClass]"
+      v-show="optionslocal.removeable && querylocal.type"
+      @click="remove"
+    >
+      <slot name="btn-remove">X</slot>
+    </button>
   </div>
 </template>
 <script>

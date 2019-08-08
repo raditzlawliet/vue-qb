@@ -1,11 +1,13 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
-    <slot name="f-case-begin">
-      <label>CASE</label>
-    </slot>
-    <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
-      <slot name="btn-add">+</slot>
-    </button>
+  <div :class="[...templateOptions.formGroupClass]">
+    <div :class="[...normalizedTemplateOptions.inlineClass]">
+      <slot name="f-case-begin">
+        <label>CASE</label>
+      </slot>
+      <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+        <slot name="btn-add">+</slot>
+      </button>
+    </div>
     <div
       v-for="(whenThen, index) in querylocal.values"
       :key="index"
@@ -53,23 +55,27 @@
         </div>
       </slot>
     </div>
-    <slot name="f-case-else">
-      <div :class="[...normalizedTemplateOptions.rowClass]">
-        <label>ELSE</label>
-        <dynamic-selector
-          ref="elseValue"
-          emitRef="elseValue"
-          :query="querylocal.elseValue"
-          @query-update="onQueryUpdate"
-          :templateOptions="templateOptions"
-        >
-          <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-          <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-            <slot :name="name" v-bind="slotData" />
-          </template>
-        </dynamic-selector>
-      </div>
-    </slot>
+    <div :class="[...normalizedTemplateOptions.inlineClass]">
+      <slot name="f-case-else">
+        <div :class="[...normalizedTemplateOptions.tabRightClass]">
+          <label>ELSE</label>
+        </div>
+        <div :class="[...normalizedTemplateOptions.columnGrowClass]">
+          <dynamic-selector
+            ref="elseValue"
+            emitRef="elseValue"
+            :query="querylocal.elseValue"
+            @query-update="onQueryUpdate"
+            :templateOptions="templateOptions"
+          >
+            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+              <slot :name="name" v-bind="slotData" />
+            </template>
+          </dynamic-selector>
+        </div>
+      </slot>
+    </div>
     <slot name="f-case-end">
       <label>END</label>
     </slot>

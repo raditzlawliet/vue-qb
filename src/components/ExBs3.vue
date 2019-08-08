@@ -2,12 +2,16 @@
   <div class="main-wrapper-bs3">
     <h2>Bootstrap 3</h2>
     <hr />
-    <dynamic-selector
-      ref="foo"
-      :query="query"
-      @query-update="onQueryUpdate"
-      :templateOptions="templateOptions"
-    ></dynamic-selector>
+    <div class="row">
+      <div class="col-md-12">
+        <dynamic-selector
+          ref="foo"
+          :query="query"
+          @query-update="onQueryUpdate"
+          :templateOptions="templateOptions"
+        ></dynamic-selector>
+      </div>
+    </div>
     <hr />
     <button class="btn btn-success" @click="generateSQL">Print SQL</button>
     <div class="alert alert-info" role="alert" style="margin-top: 1em">

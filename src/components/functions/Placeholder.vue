@@ -1,5 +1,5 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.functionsWrapperClass]">
+  <div :class="[...normalizedTemplateOptions.formGroupClass]">
     <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder">
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -30,14 +30,14 @@ var defaultTemplateOptions = function() {
     options: {
       // all
       "": {
-        selectorWrapperClass: [],
-        functionsWrapperClass: [],
+        formRowClass: [],
+        formGroupClass: [],
         buttonClass: []
       },
       // spesific
       value: {
-        selectorWrapperClass: [],
-        functionsWrapperClass: [],
+        formRowClass: [],
+        formGroupClass: [],
         buttonClass: []
       }
     }
@@ -47,8 +47,8 @@ var defaultTemplateOptions = function() {
 var originalTemplateOptions = {
   // bootstrap 4
   "": {
-    selectorWrapperClass: ["vue-qb-selector"],
-    functionsWrapperClass: ["vue-qb-function"],
+    formRowClass: ["vue-qb-selector"],
+    formGroupClass: ["vue-qb-function"],
     removeBtnClass: ["vue-qb-btn"],
     addBtnClass: ["vue-qb-btn"],
     inputClass: ["vue-qb-input"],
@@ -58,19 +58,25 @@ var originalTemplateOptions = {
     columnGrowClass: ["flex-grow-1"]
   },
   bs4: {
-    selectorWrapperClass: ["form-group", "ml-2"],
-    functionsWrapperClass: [],
-    removeBtnClass: ["btn btn-danger btn-sm ml-2"],
-    addBtnClass: ["btn btn-success btn-sm ml-2"],
+    formRowClass: ["form-row mb-0"],
+    formGroupClass: ["form-group col-auto mb-0"],
+    rowClass: ["form-row"],
+    rowItemClass: ["form-group col-md-12 d-flex flex-row mb-1"],
+    inlineClass: ["d-flex flex-row"],
+
+    columnGrowClass: ["flex-grow-1"],
+    columnClass: [""],
+    tabClass: ["ml-2"],
+    tabRightClass: ["mr-2"],
+
+    removeBtnClass: ["btn btn-danger mb-2 ml-2 mr-2"],
+    addBtnClass: ["btn btn-success mb-2 ml-2"],
     inputClass: ["form-control form-control-sm flex-grow-1"],
-    selectClass: ["form-control form-control-sm flex-grow-1"],
-    rowClass: ["row"],
-    rowItemClass: ["col-md-12 d-flex flex-row"],
-    columnGrowClass: ["flex-grow-1"]
+    selectClass: ["form-control form-control-sm flex-grow-1"]
   },
   bs3: {
-    selectorWrapperClass: [""],
-    functionsWrapperClass: [""],
+    formRowClass: [""],
+    formGroupClass: [""],
     removeBtnClass: ["btn btn-danger btn-xs ml-2"],
     addBtnClass: ["btn btn-success btn-xs ml-2"],
     inputClass: ["form-control form-control-xs flex-grow-1"],
