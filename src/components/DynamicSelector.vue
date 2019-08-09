@@ -1,7 +1,7 @@
 <template>
-  <form v-on:submit.prevent>
-    <div :class="[...normalizedTemplateOptions.formRowClass]">
-      <div :class="[...normalizedTemplateOptions.formrowItemClass]">
+  <form v-on:submit.prevent class="border-left border-primary mb-1 pl-1 rounded">
+    <div class="form-row">
+      <div class="form-group col-12 mb-2">
         <component
           :is="component"
           :query="querylocal"

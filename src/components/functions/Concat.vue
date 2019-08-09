@@ -1,21 +1,17 @@
 <template>
-  <div :class="[...templateOptions.formGroupClass]">
-    <div :class="[...normalizedTemplateOptions.inlineClass]">
+  <div>
+    <div>
       <slot name="f-concat-begin">
-        <label>CONCAT (</label>
+        <label class="col-form-label col-form-label-sm">CONCAT (</label>
       </slot>
       <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
     </div>
-    <div
-      v-for="(item, index) in querylocal.values"
-      :key="index"
-      :class="[...normalizedTemplateOptions.rowClass]"
-    >
+    <div v-for="(item, index) in querylocal.values" :key="index" class="ml-2">
       <slot name="f-concat-value">
-        <div :class="[...normalizedTemplateOptions.rowItemClass]">
-          <div :class="[...normalizedTemplateOptions.columnClass]">
+        <div class="d-flex d-flex-row">
+          <div class="mr-2">
             <button
               :class="[...normalizedTemplateOptions.removeBtnClass]"
               :disabled="index == 0"
@@ -24,7 +20,7 @@
               <slot name="btn-remove">X</slot>
             </button>
           </div>
-          <div :class="[...normalizedTemplateOptions.columnGrowClass]">
+          <div class="flex-grow-1">
             <dynamic-selector
               ref="values_"
               :emitRef="`values_${index}`"
@@ -46,9 +42,9 @@
         </div>
       </slot>
     </div>
-    <div :class="[...normalizedTemplateOptions.inlineClass]">
+    <div>
       <slot name="f-concat-end">
-        <label>)</label>
+        <label class="col-form-label col-form-label-sm">)</label>
       </slot>
       <button
         :class="[...normalizedTemplateOptions.removeBtnClass]"

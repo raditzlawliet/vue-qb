@@ -1,17 +1,19 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.inlineClass]">
-    <div :class="[...normalizedTemplateOptions.columnGrowClass]">
+  <div class="d-flex d-flex-row">
+    <div class="flex-grow-1">
       <select :class="[...normalizedTemplateOptions.selectClass]" v-model="querylocal.value">
         <option v-for="o in lObjects" :key="o.id" :value="o.id">{{o.name}}</option>
       </select>
     </div>
-    <button
-      :class="[...normalizedTemplateOptions.removeBtnClass]"
-      v-show="optionslocal.removeable && querylocal.type"
-      @click="remove"
-    >
-      <slot name="btn-remove">X</slot>
-    </button>
+    <div class="ml-2">
+      <button
+        :class="[...normalizedTemplateOptions.removeBtnClass]"
+        v-show="optionslocal.removeable && querylocal.type"
+        @click="remove"
+      >
+        <slot name="btn-remove">X</slot>
+      </button>
+    </div>
   </div>
 </template>
 <script>

@@ -69,10 +69,10 @@ var originalTemplateOptions = {
     tabClass: ["ml-2"],
     tabRightClass: ["mr-2"],
 
-    removeBtnClass: ["btn btn-danger mb-2 ml-2 mr-2"],
-    addBtnClass: ["btn btn-success mb-2 ml-2"],
-    inputClass: ["form-control form-control-sm flex-grow-1"],
-    selectClass: ["form-control form-control-sm flex-grow-1"]
+    removeBtnClass: ["btn btn-danger btn-sm"],
+    addBtnClass: ["btn btn-success btn-sm ml-2"],
+    inputClass: ["form-control form-control-sm"],
+    selectClass: ["form-control form-control-sm"]
   },
   bs3: {
     formRowClass: [""],
