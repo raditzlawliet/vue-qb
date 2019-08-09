@@ -1,26 +1,32 @@
 <template>
-  <div class="main-wrapper-bs4">
-    <h2>Bootstrap 4</h2>>
+  <div class="main-wrapper-bs3">
+    <h3>Bootstrap 3</h3>
+
     <hr />
-    <dynamic-selector
-      ref="foo"
-      :query="query"
-      @query-update="onQueryUpdate"
-      :templateOptions="templateOptions"
-    ></dynamic-selector>
+    <div class="row">
+      <div class="col-md-12">
+        <dynamic-selector
+          ref="foo"
+          :query="query"
+          @query-update="onQueryUpdate"
+          :templateOptions="templateOptions"
+        ></dynamic-selector>
+      </div>
+    </div>
     <hr />
     <button class="btn btn-success" @click="generateSQL">Print SQL</button>
-    <div class="mt-2 alert alert-primary">
+    <div class="alert alert-info" role="alert" style="margin-top: 1em">
       <code>{{ generatedSQL }}</code>
     </div>
-    <div class="mt-2 alert alert-success">
+    <div class="alert alert-success" role="alert" style="margin-top: 1em">
       <code>{{ generatedJSON }}</code>
     </div>
   </div>
 </template>
 
 <script>
-import "bootstrap";
+import "expose-loader?jQuery!jquery";
+import "bootstrap3";
 export default {
   name: "app",
   components: {},
@@ -30,7 +36,7 @@ export default {
       generatedSQL: "",
       generatedJSON: "",
       templateOptions: {
-        template: "bs4"
+        template: "bs3"
       },
       query: {
         type: "Trim",
@@ -42,7 +48,7 @@ export default {
             { type: "Object", values: [] },
             { type: "Attribute", values: [] },
             { type: "Case", values: [] },
-            { type: "", values: [] }
+            { type: "Trim", values: [] }
           ]
         }
       }
@@ -59,18 +65,26 @@ export default {
   },
   mounted() {
     setTimeout(() => {
+      this.generateSQL();
       this.generatedJSON = JSON.stringify(this.query);
     }, 250);
-    setTimeout(() => {
-      this.generateSQL();
-    }, 500);
   }
 };
 </script>
 
-<style scoped lang="scss">
-.main-wrapper-bs4 ::v-deep {
-  @import "~bootstrap/scss/bootstrap";
+<style scoped lang="less">
+.main-wrapper-bs3 ::v-deep {
+  @import "~bootstrap3/less/bootstrap";
 }
 </style>
 
+<style scoped lang="scss">
+.main-wrapper-bs3 ::v-deep {
+  .ml-2 {
+    margin-left: 1em !important;
+  }
+}
+// .main-wrapper-bs3 ::v-deep {
+//   @import "@/assets/sass/bs3/bs3.scss";
+// }
+</style>

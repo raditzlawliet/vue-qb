@@ -1,12 +1,43 @@
 <template>
   <div>
-    <div>
-      <slot name="f-trim-begin">
-        <label class="col-form-label col-form-label-sm">TRIM (</label>
-      </slot>
+    <div v-if="normalizedTemplateOptions.template =='bs4'">
+      <div>
+        <slot name="f-trim-begin">
+          <label class="col-form-label col-form-label-sm">TRIM (</label>
+        </slot>
+      </div>
+      <div class="ml-2">
+        <slot name="f-trim-value">
+          <dynamic-selector
+            ref="value"
+            emitRef="value"
+            :query="querylocal.value"
+            @query-update="onQueryUpdate"
+            :templateOptions="templateOptions"
+          >
+            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+              <slot :name="name" v-bind="slotData" />
+            </template>
+          </dynamic-selector>
+        </slot>
+      </div>
+      <div>
+        <slot name="f-trim-end">
+          <label class="col-form-label col-form-label-sm">)</label>
+        </slot>
+        <button
+          :class="[...normalizedTemplateOptions.options.removeBtnClass]"
+          v-show="optionslocal.removeable && querylocal.type"
+          @click="remove"
+        >
+          <slot name="btn-remove">X</slot>
+        </button>
+      </div>
     </div>
-    <div class="ml-2">
-      <slot name="f-trim-value">
+    <div v-if="normalizedTemplateOptions.template =='bs3'">
+      <label class="control-label input-sm">TRIM (</label>
+      <div class="ml-2">
         <dynamic-selector
           ref="value"
           emitRef="value"
@@ -19,14 +50,10 @@
             <slot :name="name" v-bind="slotData" />
           </template>
         </dynamic-selector>
-      </slot>
-    </div>
-    <div>
-      <slot name="f-trim-end">
-        <label class="col-form-label col-form-label-sm">)</label>
-      </slot>
+      </div>
+      <label class="control-label input-sm">)</label>
       <button
-        :class="[...normalizedTemplateOptions.removeBtnClass]"
+        :class="[...normalizedTemplateOptions.options.removeBtnClass]"
         v-show="optionslocal.removeable && querylocal.type"
         @click="remove"
       >

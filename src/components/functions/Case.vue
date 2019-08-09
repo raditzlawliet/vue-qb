@@ -2,7 +2,7 @@
   <div>
     <div>
       <label class="col-form-label col-form-label-sm">CASE</label>
-      <button :class="[...normalizedTemplateOptions.addBtnClass]" @click="addItem">
+      <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
     </div>
@@ -14,7 +14,7 @@
       <div class="form-group">
         <div class="mr-1">
           <button
-            :class="[...normalizedTemplateOptions.removeBtnClass]"
+            :class="[...normalizedTemplateOptions.options.removeBtnClass]"
             :disabled="index == 0"
             @click="removeItem(index)"
           >X</button>
@@ -80,7 +80,7 @@
       <label class="col-form-label col-form-label-sm">END</label>
     </slot>
     <button
-      :class="[...normalizedTemplateOptions.removeBtnClass]"
+      :class="[...normalizedTemplateOptions.options.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
     >

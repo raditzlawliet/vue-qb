@@ -1,5 +1,5 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.formGroupClass]">
+  <div :class="[...normalizedTemplateOptions.options.formGroupClass]">
     <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder">
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -7,7 +7,7 @@
       </template>
     </component>
     <button
-      :class="[...normalizedTemplateOptions.removeBtnClass]"
+      :class="[...normalizedTemplateOptions.options.removeBtnClass]"
       v-show="optionslocal.removeable && querylocal.type"
       @click="remove"
     >
@@ -49,13 +49,15 @@ var originalTemplateOptions = {
   "": {
     formRowClass: ["vue-qb-selector"],
     formGroupClass: ["vue-qb-function"],
+
+    rowClass: ["vue-qb-row"],
+    rowItemClass: ["vue-qb-row-item"],
+    columnGrowClass: ["flex-grow-1"],
+
     removeBtnClass: ["vue-qb-btn"],
     addBtnClass: ["vue-qb-btn"],
     inputClass: ["vue-qb-input"],
-    selectClass: ["vue-qb-select"],
-    rowClass: ["vue-qb-row"],
-    rowItemClass: ["vue-qb-row-item"],
-    columnGrowClass: ["flex-grow-1"]
+    selectClass: ["vue-qb-select"]
   },
   bs4: {
     formRowClass: ["form-row mb-0"],
@@ -77,13 +79,14 @@ var originalTemplateOptions = {
   bs3: {
     formRowClass: [""],
     formGroupClass: [""],
-    removeBtnClass: ["btn btn-danger btn-xs ml-2"],
-    addBtnClass: ["btn btn-success btn-xs ml-2"],
-    inputClass: ["form-control form-control-xs flex-grow-1"],
-    selectClass: ["form-control form-control-xs flex-grow-1"],
     rowClass: ["row"],
     rowItemClass: ["col-md-12 d-flex flex-row"],
-    columnGrowClass: ["flex-grow-1"]
+    columnGrowClass: ["flex-grow-1"],
+
+    removeBtnClass: ["btn btn-danger btn-sm"],
+    addBtnClass: ["btn btn-success btn-sm"],
+    inputClass: ["form-control form-control-sm"],
+    selectClass: ["form-control form-control-sm"]
   }
 };
 
@@ -189,7 +192,10 @@ export default {
       specOptions = specOptions || {};
       globalOptions = globalOptions || {};
 
-      var newOptions = Object.assign(specOptions, globalOptions, coreOptions);
+      var newOptions = {
+        template: this.templateOptions.template,
+        options: Object.assign(specOptions, globalOptions, coreOptions)
+      };
 
       return newOptions;
     }

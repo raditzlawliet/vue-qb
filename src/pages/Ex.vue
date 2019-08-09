@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>No Theme</h2>
+    <h3>No Theme</h3>
     <hr />
     <dynamic-selector
       ref="foo"

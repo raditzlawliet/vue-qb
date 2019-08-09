@@ -1,7 +1,60 @@
 <template>
-  <form v-on:submit.prevent class="border-left border-primary mb-1 pl-1 rounded">
-    <div class="form-row">
-      <div class="form-group col-12 mb-2">
+  <div>
+    <form
+      v-on:submit.prevent
+      class="border-left border-primary mb-1 pl-1 rounded"
+      v-if="normalizedTemplateOptions.template =='bs4'"
+    >
+      <div class="form-row">
+        <div class="form-group col-12 mb-2">
+          <component
+            :is="component"
+            :query="querylocal"
+            :emitRef="emitRef"
+            v-if="component && !functionData.isTemplate"
+            ref="elComponent"
+            @query-update="onQueryUpdate"
+            @remove="componentOnRemove"
+            :templateOptions="templateOptions"
+          >
+            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+              <slot :name="name" v-bind="slotData" />
+            </template>
+          </component>
+          <component
+            :is="component"
+            :query="querylocal"
+            :emitRef="emitRef"
+            v-else-if="component && functionData.isTemplate"
+            ref="elComponent"
+            :functionOptions="functionData.functionOptions"
+            @query-update="onQueryUpdate"
+            @remove="componentOnRemove"
+            :templateOptions="templateOptions"
+          >
+            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+              <slot :name="name" v-bind="slotData" />
+            </template>
+          </component>
+          <select
+            :class="[...normalizedTemplateOptions.options.selectClass]"
+            v-model="querylocal.type"
+            v-else
+          >
+            <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
+          </select>
+          <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
+        </div>
+      </div>
+    </form>
+    <form
+      v-on:submit.prevent
+      class="form-inline"
+      v-else-if="normalizedTemplateOptions.template =='bs3'"
+    >
+      <div class="form-group">
         <component
           :is="component"
           :query="querylocal"
@@ -34,7 +87,7 @@
           </template>
         </component>
         <select
-          :class="[...normalizedTemplateOptions.selectClass]"
+          :class="[...normalizedTemplateOptions.options.selectClass]"
           v-model="querylocal.type"
           v-else
         >
@@ -42,9 +95,10 @@
         </select>
         <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
+
 <script>
 import globalFunctions from "@/components/globalFunctions.js";
 import Placeholder from "./functions/Placeholder.vue";

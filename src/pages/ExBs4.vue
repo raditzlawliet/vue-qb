@@ -1,31 +1,26 @@
 <template>
-  <div class="main-wrapper-bs3">
-    <h2>Bootstrap 3</h2>
+  <div class="main-wrapper-bs4">
+    <h3>Bootstrap 4</h3>
     <hr />
-    <div class="row">
-      <div class="col-md-12">
-        <dynamic-selector
-          ref="foo"
-          :query="query"
-          @query-update="onQueryUpdate"
-          :templateOptions="templateOptions"
-        ></dynamic-selector>
-      </div>
-    </div>
+    <dynamic-selector
+      ref="foo"
+      :query="query"
+      @query-update="onQueryUpdate"
+      :templateOptions="templateOptions"
+    ></dynamic-selector>
     <hr />
     <button class="btn btn-success" @click="generateSQL">Print SQL</button>
-    <div class="alert alert-info" role="alert" style="margin-top: 1em">
+    <div class="mt-2 alert alert-primary">
       <code>{{ generatedSQL }}</code>
     </div>
-    <div class="alert alert-success" role="alert" style="margin-top: 1em">
+    <div class="mt-2 alert alert-success">
       <code>{{ generatedJSON }}</code>
     </div>
   </div>
 </template>
 
 <script>
-import "expose-loader?jQuery!jquery";
-import "bootstrap3";
+import "bootstrap";
 export default {
   name: "app",
   components: {},
@@ -42,8 +37,13 @@ export default {
         values: [],
         value: {
           type: "Concat",
-          values: [{ type: "", values: [] }],
-          value: { type: "Value", values: [], value: "123" }
+          values: [
+            { type: "Value", value: "123" },
+            { type: "Object", values: [] },
+            { type: "Attribute", values: [] },
+            { type: "Case", values: [] },
+            { type: "", values: [] }
+          ]
         }
       }
     };
@@ -59,16 +59,18 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.generateSQL();
       this.generatedJSON = JSON.stringify(this.query);
     }, 250);
+    setTimeout(() => {
+      this.generateSQL();
+    }, 500);
   }
 };
 </script>
 
-<style scoped lang="less">
-.main-wrapper-bs3 ::v-deep {
-  @import "~bootstrap3/less/bootstrap";
+<style scoped lang="scss">
+.main-wrapper-bs4 ::v-deep {
+  @import "~bootstrap/scss/bootstrap";
 }
 </style>
 
