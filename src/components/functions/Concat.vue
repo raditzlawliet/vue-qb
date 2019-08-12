@@ -61,27 +61,31 @@
       <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
-      <div v-for="(item, index) in querylocal.values" :key="index" class="form-inline ml-2">
-        <div class="form-group">
-          <button
-            :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-            :disabled="index == 0"
-            @click="removeItem(index)"
-          >
-            <slot name="btn-remove">X</slot>
-          </button>
-          <dynamic-selector
-            ref="values_"
-            :emitRef="`values_${index}`"
-            :query="item"
-            @query-update="onQueryUpdate"
-            :templateOptions="templateOptions"
-          >
-            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-              <slot :name="name" v-bind="slotData" />
-            </template>
-          </dynamic-selector>
+      <div v-for="(item, index) in querylocal.values" :key="index" class="row ml-2">
+        <div class="d-flex d-flex-row col-xs-12">
+          <div class="mr-2">
+            <button
+              :class="[...normalizedTemplateOptions.options.removeBtnClass]"
+              :disabled="index == 0"
+              @click="removeItem(index)"
+            >
+              <slot name="btn-remove">X</slot>
+            </button>
+          </div>
+          <div class="flex-grow-1">
+            <dynamic-selector
+              ref="values_"
+              :emitRef="`values_${index}`"
+              :query="item"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
           <label style="margin-left: 0.5em;">,</label>
         </div>
       </div>

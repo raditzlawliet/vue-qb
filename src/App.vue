@@ -8,9 +8,9 @@
           <li>
             <router-link to="/example">Example</router-link>
             <ul>
-              <li>
+              <!-- <li>
                 <router-link to="/example">No Theme</router-link>
-              </li>
+              </li> -->
               <li>
                 <router-link to="/example/bs4">Bootstrap 4</router-link>
               </li>

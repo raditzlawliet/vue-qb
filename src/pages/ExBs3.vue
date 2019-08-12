@@ -1,25 +1,29 @@
 <template>
   <div class="main-wrapper-bs3">
-    <h3>Bootstrap 3</h3>
+    <div class="container-fluid">
+      <div class="row no-gutter">
+        <div class="col-xs-12">
+          <h3>Bootstrap 3</h3>
 
-    <hr />
-    <div class="row">
-      <div class="col-md-12">
-        <dynamic-selector
-          ref="foo"
-          :query="query"
-          @query-update="onQueryUpdate"
-          :templateOptions="templateOptions"
-        ></dynamic-selector>
+          <hr />
+
+          <dynamic-selector
+            ref="foo"
+            :query="query"
+            @query-update="onQueryUpdate"
+            :templateOptions="templateOptions"
+          ></dynamic-selector>
+
+          <hr />
+          <button class="btn btn-success" @click="generateSQL">Print SQL</button>
+          <div class="alert alert-info" role="alert" style="margin-top: 1em">
+            <code>{{ generatedSQL }}</code>
+          </div>
+          <div class="alert alert-success" role="alert" style="margin-top: 1em">
+            <code>{{ generatedJSON }}</code>
+          </div>
+        </div>
       </div>
-    </div>
-    <hr />
-    <button class="btn btn-success" @click="generateSQL">Print SQL</button>
-    <div class="alert alert-info" role="alert" style="margin-top: 1em">
-      <code>{{ generatedSQL }}</code>
-    </div>
-    <div class="alert alert-success" role="alert" style="margin-top: 1em">
-      <code>{{ generatedJSON }}</code>
     </div>
   </div>
 </template>
@@ -79,12 +83,12 @@ export default {
 </style>
 
 <style scoped lang="scss">
-.main-wrapper-bs3 ::v-deep {
-  .ml-2 {
-    margin-left: 1em !important;
-  }
-}
 // .main-wrapper-bs3 ::v-deep {
-//   @import "@/assets/sass/bs3/bs3.scss";
+//   .ml-2 {
+//     margin-left: 1em !important;
+//   }
 // }
+.main-wrapper-bs3 ::v-deep {
+  @import "@/assets/sass/bs3vqb/bs3vqb.scss";
+}
 </style>

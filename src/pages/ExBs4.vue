@@ -1,20 +1,26 @@
 <template>
   <div class="main-wrapper-bs4">
-    <h3>Bootstrap 4</h3>
-    <hr />
-    <dynamic-selector
-      ref="foo"
-      :query="query"
-      @query-update="onQueryUpdate"
-      :templateOptions="templateOptions"
-    ></dynamic-selector>
-    <hr />
-    <button class="btn btn-success" @click="generateSQL">Print SQL</button>
-    <div class="mt-2 alert alert-primary">
-      <code>{{ generatedSQL }}</code>
-    </div>
-    <div class="mt-2 alert alert-success">
-      <code>{{ generatedJSON }}</code>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h3>Bootstrap 4</h3>
+          <hr />
+          <dynamic-selector
+            ref="foo"
+            :query="query"
+            @query-update="onQueryUpdate"
+            :templateOptions="templateOptions"
+          ></dynamic-selector>
+          <hr />
+          <button class="btn btn-success" @click="generateSQL">Print SQL</button>
+          <div class="mt-2 alert alert-primary">
+            <code>{{ generatedSQL }}</code>
+          </div>
+          <div class="mt-2 alert alert-success">
+            <code>{{ generatedJSON }}</code>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

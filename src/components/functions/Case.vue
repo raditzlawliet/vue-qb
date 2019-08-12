@@ -1,91 +1,181 @@
 <template>
   <div>
-    <div>
-      <label class="col-form-label col-form-label-sm">CASE</label>
-      <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
-        <slot name="btn-add">+</slot>
+    <div v-if="normalizedTemplateOptions.template =='bs4'">
+      <div>
+        <label class="col-form-label col-form-label-sm">CASE</label>
+        <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
+          <slot name="btn-add">+</slot>
+        </button>
+      </div>
+      <div
+        v-for="(whenThen, index) in querylocal.values"
+        :key="index"
+        class="form-row d-flex d-flex-row mb-0 ml-1"
+      >
+        <div class="form-group">
+          <div class="mr-1">
+            <button
+              :class="[...normalizedTemplateOptions.options.removeBtnClass]"
+              :disabled="index == 0"
+              @click="removeItem(index)"
+            >X</button>
+          </div>
+        </div>
+        <div class="form-group flex-grow-1 mr-1 mb-0">
+          <label class="col-form-label col-form-label-sm">WHEN (</label>
+          <div class="ml-2">
+            <dynamic-selector
+              ref="whenValue_"
+              :emitRef="`whenValue_${index}`"
+              :query="whenThen.whenValue"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
+        </div>
+        <div class="form-group flex-grow-1 ml-1 mb-0">
+          <label class="col-form-label col-form-label-sm">THEN</label>
+          <div class="ml-2">
+            <dynamic-selector
+              ref="thenValue_"
+              :emitRef="`thenValue_${index}`"
+              :query="whenThen.thenValue"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
+        </div>
+      </div>
+      <div>
+        <slot name="f-case-else">
+          <div>
+            <label class="col-form-label col-form-label-sm">ELSE</label>
+          </div>
+          <div class="ml-2">
+            <dynamic-selector
+              ref="elseValue"
+              emitRef="elseValue"
+              :query="querylocal.elseValue"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
+        </slot>
+      </div>
+      <slot name="f-case-end">
+        <label class="col-form-label col-form-label-sm">END</label>
+      </slot>
+      <button
+        :class="[...normalizedTemplateOptions.options.removeBtnClass]"
+        v-show="optionslocal.removeable && querylocal.type"
+        @click="remove"
+      >
+        <slot name="btn-remove">X</slot>
       </button>
     </div>
-    <div
-      v-for="(whenThen, index) in querylocal.values"
-      :key="index"
-      class="form-row d-flex d-flex-row mb-0 ml-1"
-    >
-      <div class="form-group">
-        <div class="mr-1">
-          <button
-            :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-            :disabled="index == 0"
-            @click="removeItem(index)"
-          >X</button>
+    <div v-if="normalizedTemplateOptions.template =='bs3'">
+      <div>
+        <label class="control-label input-sm">CASE</label>
+        <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
+          <slot name="btn-add">+</slot>
+        </button>
+      </div>
+      <div
+        v-for="(whenThen, index) in querylocal.values"
+        :key="index"
+        class="form-row d-flex d-flex-row mb-0 ml-1"
+      >
+        <div class="form-group">
+          <div class="mr-1">
+            <button
+              :class="[...normalizedTemplateOptions.options.removeBtnClass]"
+              :disabled="index == 0"
+              @click="removeItem(index)"
+            >X</button>
+          </div>
+        </div>
+        <div class="form-group flex-grow-1 mr-1 mb-0">
+          <label class="control-label input-sm">WHEN</label>
+          <div class="ml-2">
+            <dynamic-selector
+              ref="whenValue_"
+              :emitRef="`whenValue_${index}`"
+              :query="whenThen.whenValue"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
+        </div>
+        <div class="form-group flex-grow-1 ml-1 mb-0">
+          <label class="control-label input-sm">THEN</label>
+          <div class="ml-2">
+            <dynamic-selector
+              ref="thenValue_"
+              :emitRef="`thenValue_${index}`"
+              :query="whenThen.thenValue"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
         </div>
       </div>
-      <div class="form-group flex-grow-1 mr-1 mb-0">
-        <label class="col-form-label col-form-label-sm">WHEN (</label>
-        <div class="ml-2">
-          <dynamic-selector
-            ref="whenValue_"
-            :emitRef="`whenValue_${index}`"
-            :query="whenThen.whenValue"
-            @query-update="onQueryUpdate"
-            :templateOptions="templateOptions"
-          >
-            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-              <slot :name="name" v-bind="slotData" />
-            </template>
-          </dynamic-selector>
-        </div>
+      <div>
+        <slot name="f-case-else">
+          <div>
+            <label class="control-label input-sm">ELSE</label>
+          </div>
+          <div class="ml-2">
+            <dynamic-selector
+              ref="elseValue"
+              emitRef="elseValue"
+              :query="querylocal.elseValue"
+              @query-update="onQueryUpdate"
+              :templateOptions="templateOptions"
+            >
+              <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
+              <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </dynamic-selector>
+          </div>
+        </slot>
       </div>
-      <div class="form-group flex-grow-1 ml-1 mb-0">
-        <label class="col-form-label col-form-label-sm">THEN</label>
-        <div class="ml-2">
-        <dynamic-selector
-          ref="thenValue_"
-          :emitRef="`thenValue_${index}`"
-          :query="whenThen.thenValue"
-          @query-update="onQueryUpdate"
-          :templateOptions="templateOptions"
-        >
-          <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-          <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-            <slot :name="name" v-bind="slotData" />
-          </template>
-        </dynamic-selector>
-        </div>
-      </div>
-    </div>
-    <div>
-      <slot name="f-case-else">
-        <div>
-          <label class="col-form-label col-form-label-sm">ELSE</label>
-        </div>
-        <div class="ml-2">
-          <dynamic-selector
-            ref="elseValue"
-            emitRef="elseValue"
-            :query="querylocal.elseValue"
-            @query-update="onQueryUpdate"
-            :templateOptions="templateOptions"
-          >
-            <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
-            <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
-              <slot :name="name" v-bind="slotData" />
-            </template>
-          </dynamic-selector>
-        </div>
+      <slot name="f-case-end">
+        <label class="control-label input-sm">END</label>
       </slot>
+      <button
+        :class="[...normalizedTemplateOptions.options.removeBtnClass]"
+        v-show="optionslocal.removeable && querylocal.type"
+        @click="remove"
+      >
+        <slot name="btn-remove">X</slot>
+      </button>
     </div>
-    <slot name="f-case-end">
-      <label class="col-form-label col-form-label-sm">END</label>
-    </slot>
-    <button
-      :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-      v-show="optionslocal.removeable && querylocal.type"
-      @click="remove"
-    >
-      <slot name="btn-remove">X</slot>
-    </button>
   </div>
 </template>
 <script>

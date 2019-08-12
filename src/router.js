@@ -15,12 +15,13 @@ const router = new VueRouter({
             children: [
                 {
                     path: '/',
-                    component: Ex,
+                    component: ExBs3,
+                    alias: 'bs3'
                 },
-                {
-                    path: 'bs3',
-                    component: ExBs3
-                },
+                // {
+                //     path: 'bs3',
+                //     component: ExBs3
+                // },
                 {
                     path: 'bs4',
                     component: ExBs4
