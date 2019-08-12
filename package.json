@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-bundle": "vue-cli-service build --target lib --name vue-qb ./src/components/index.js"
+    "build-bundle": "npm run build-bundle-vue-qb && npm run build-bundle-vue-qb-bs3",
+    "build-bundle-vue-qb": "vue-cli-service build --target lib --dest dist/vue-qb --name vue-qb ./src/components/index.js",
+    "build-bundle-vue-qb-bs3": "vue-cli-service build --target lib --dest dist/vue-qb-bs3 --name vue-qb-bs3 ./src/components/index-bs3.js"
   },
   "dependencies": {
     "vue": "^2.6.10",
