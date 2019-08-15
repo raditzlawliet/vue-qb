@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="d-flex d-flex-row" v-if="['bs3', 'bs4'].includes(normalizedTemplateOptions.template)">
+    <div
+      class="d-flex d-flex-row"
+      v-if="['bs3', 'bs4'].includes(normalizedTemplateOptions.template)"
+    >
       <div class="flex-grow-1">
         <input
           :class="[...normalizedTemplateOptions.options.inputClass]"

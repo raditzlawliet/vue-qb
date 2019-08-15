@@ -9,7 +9,7 @@
       </div>
       <div
         v-for="(whenThen, index) in querylocal.values"
-        :key="index"
+        :key="whenThen.uuid"
         class="form-row d-flex d-flex-row mb-0 ml-1"
       >
         <div class="form-group">
@@ -26,10 +26,9 @@
           <div class="ml-2">
             <dynamic-selector
               ref="whenValue_"
-              :emitRef="`whenValue_${index}`"
               :query="whenThen.whenValue"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.values[${index}].whenValue`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -43,10 +42,9 @@
           <div class="ml-2">
             <dynamic-selector
               ref="thenValue_"
-              :emitRef="`thenValue_${index}`"
               :query="whenThen.thenValue"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.values[${index}].thenValue`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -64,10 +62,9 @@
           <div class="ml-2">
             <dynamic-selector
               ref="elseValue"
-              emitRef="elseValue"
               :query="querylocal.elseValue"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.elseValue`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -97,7 +94,7 @@
       </div>
       <div
         v-for="(whenThen, index) in querylocal.values"
-        :key="index"
+        :key="whenThen.uuid"
         class="form-row d-flex d-flex-row mb-0 ml-1"
       >
         <div class="form-group">
@@ -114,10 +111,9 @@
           <div class="ml-2">
             <dynamic-selector
               ref="whenValue_"
-              :emitRef="`whenValue_${index}`"
               :query="whenThen.whenValue"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.values[${index}].whenValue`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -131,10 +127,9 @@
           <div class="ml-2">
             <dynamic-selector
               ref="thenValue_"
-              :emitRef="`thenValue_${index}`"
               :query="whenThen.thenValue"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.values[${index}].thenValue`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -152,10 +147,9 @@
           <div class="ml-2">
             <dynamic-selector
               ref="elseValue"
-              emitRef="elseValue"
               :query="querylocal.elseValue"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.elseValue`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -213,41 +207,15 @@ export default {
           END
       `;
     },
-    // normalizeQuery: function(d) {
-    //   return Object.assign(
-    //     {
-    //       type: "", // for type
-    //       // value: undefined, // for value
-    //       values: [] // for array
-    //     },
-    //     d
-    //   );
-    // }
-    // onQueryUpdate: function(emitRef, value) {
-    //   this.querylocal[emitRef] = this.normalizeQuery(value);
-    // }
     addItem: function() {
       this.querylocal.values.push({
+        uuid: this.generateUUID(),
         whenValue: this.getQueryModel(),
         thenValue: this.getQueryModel()
       });
     },
     removeItem: function(i) {
       this.querylocal.values.splice(i, 1);
-    },
-    onQueryUpdate: function(emitRef, value) {
-      // console.log(emitRef);
-      if (emitRef.startsWith("whenValue_")) {
-        let index = emitRef.split("_").pop();
-        this.querylocal.values[index].whenValue = this.normalizeQuery(value);
-      } else if (emitRef.startsWith("thenValue_")) {
-        let index = emitRef.split("_").pop();
-        this.querylocal.values[index].thenValue = this.normalizeQuery(value);
-      } else {
-        this.querylocal[emitRef] = this.normalizeQuery(value);
-      }
-      this.$emit("query-update", this.emitRef, this.querylocal);
-      // console.log(emitRef, JSON.stringify(this.querylocal));
     }
   }
 };

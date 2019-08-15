@@ -10,10 +10,9 @@
         <slot name="f-trim-value">
           <dynamic-selector
             ref="value"
-            emitRef="value"
             :query="querylocal.value"
-            @query-update="onQueryUpdate"
             :templateOptions="templateOptions"
+            :path="`${path}.value`"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -40,10 +39,9 @@
       <div class="ml-2">
         <dynamic-selector
           ref="value"
-          emitRef="value"
           :query="querylocal.value"
-          @query-update="onQueryUpdate"
           :templateOptions="templateOptions"
+          :path="`${path}.value`"
         >
           <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
           <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">

@@ -3,6 +3,7 @@ import Vue from "vue";
 
 // import Selector from "./Selector.vue";
 import DynamicSelector from "@/components/DynamicSelector.vue";
+import VueQueryBuilder from "@/components/VueQueryBuilder.vue";
 
 // import FTrim from "./functions/Trim.vue";
 // import FValue from "./functions/Value.vue";
@@ -15,6 +16,7 @@ const Components = {
     // FlockBanner,
     // Selector,
     DynamicSelector,
+    VueQueryBuilder,
 
     // FTrim, 
     // FValue, 

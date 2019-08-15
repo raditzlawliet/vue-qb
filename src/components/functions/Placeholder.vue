@@ -17,6 +17,8 @@
 </template>
 <script>
 import globalSettings from "@/components/globalSettings.js";
+import { EventBus } from "@/components/event-bus.js";
+import { uuid } from "vue-uuid";
 
 var defaultOptions = function() {
   return {
@@ -92,14 +94,22 @@ var originalTemplateOptions = {
 
 export default {
   props: {
+    // query path of root
+    path: {
+      type: String,
+      default: ""
+    },
+    // options for component
     options: {
       type: Object,
       default: defaultOptions
     },
+    // template options from root
     templateOptions: {
       type: Object,
       default: defaultTemplateOptions
     },
+    // list of function from root
     functionOptions: {
       type: Object,
       default: () => {
@@ -109,6 +119,7 @@ export default {
         };
       }
     },
+    // query from parent/root
     query: {
       type: Object,
       default: function() {
@@ -118,19 +129,15 @@ export default {
           values: [] // for array
         };
       }
-    },
-    emitRef: {
-      type: String,
-      default: "value"
     }
   },
   watch: {
     querylocal: {
       handler: function(newVal) {
-        // console.log(JSON.stringify(newVal))
-        this.$emit("query-update", this.emitRef, newVal);
+        EventBus.$emit("query-update", this.path, newVal);
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   data() {
@@ -142,17 +149,6 @@ export default {
   },
   mounted() {},
   computed: {
-    // [read-only] use this to avoid nested object null
-    // normalizedQuery() {
-    //   return Object.assign(
-    //     {
-    //       type: "", // for type
-    //       // value: undefined, // for value
-    //       values: [] // for array
-    //     },
-    //     this.querylocal
-    //   );
-    // },
     generateSQLNodes() {
       if (this.functionOptions.generateSQL)
         return this.functionOptions.generateSQL.split(/#([\w]+)/);
@@ -201,21 +197,30 @@ export default {
     }
   },
   methods: {
+    generateUUID: function() {
+      return uuid.v1();
+    },
     normalizeOptions: function(d) {
       return Object.assign(defaultOptions(), d);
     },
     normalizeQuery: function(d) {
-      return Object.assign(
+      var validQuery = Object.assign(
         {
+          uuid: this.generateUUID(),
           type: "", // for type
           // value: undefined, // for value
           values: [] // for array
         },
         d
       );
+      validQuery.values.forEach(v => {
+        if (!v.uuid) v.uuid = this.generateUUID();
+      });
+      return validQuery;
     },
     getQueryModel: function() {
       return {
+        uuid: this.generateUUID(),
         type: "", // for type
         // value: undefined, // for value
         values: [] // for array
@@ -227,29 +232,17 @@ export default {
       this.generateSQLNodes.forEach((node, i) => {
         if (i % 2) {
           try {
-            // console.log(node, this.$refs.placeholder);
-            // console.log(this.$refs.placeholder.$refs[node]);
             sql += this.$refs.placeholder.$refs[node].generateSQL();
             return;
-          } catch (e) {
-            // console.error(e.stack);
-          }
+          } catch (e) {}
         }
         sql += node;
       });
       return sql;
     },
-    onQueryUpdate: function(emitRef, value) {
-      this.querylocal[emitRef] = this.normalizeQuery(value);
-      this.$emit("query-update", this.emitRef, this.querylocal);
-      // console.log(emitRef, JSON.stringify(this.querylocal));
-    },
     remove: function() {
       this.$emit("remove");
     }
-    // onQueryUpdate: function(emitRef, value) {
-    //   this.querylocal = this.normalizeQuery(value);
-    // }
   }
 };
 </script>

@@ -7,12 +7,12 @@
 
           <hr />
 
-          <dynamic-selector
+          <vue-query-builder
             ref="foo"
             :query="query"
             @query-update="onQueryUpdate"
             :templateOptions="templateOptions"
-          ></dynamic-selector>
+          ></vue-query-builder>
 
           <hr />
           <button class="btn btn-success" @click="generateSQL">Print SQL</button>
@@ -63,7 +63,7 @@ export default {
       var x = this.$refs.foo.generateSQL();
       this.generatedSQL = x;
     },
-    onQueryUpdate: function(refName, q) {
+    onQueryUpdate: function(q) {
       this.generatedJSON = JSON.stringify(q);
     }
   },

@@ -10,12 +10,11 @@
           <component
             :is="component"
             :query="querylocal"
-            :emitRef="emitRef"
             v-if="component && !functionData.isTemplate"
             ref="elComponent"
-            @query-update="onQueryUpdate"
             @remove="componentOnRemove"
             :templateOptions="templateOptions"
+            :path="`${path}`"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -25,13 +24,12 @@
           <component
             :is="component"
             :query="querylocal"
-            :emitRef="emitRef"
             v-else-if="component && functionData.isTemplate"
             ref="elComponent"
             :functionOptions="functionData.functionOptions"
-            @query-update="onQueryUpdate"
             @remove="componentOnRemove"
             :templateOptions="templateOptions"
+            :path="`${path}`"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -56,12 +54,11 @@
             <component
               :is="component"
               :query="querylocal"
-              :emitRef="emitRef"
               v-if="component && !functionData.isTemplate"
               ref="elComponent"
-              @query-update="onQueryUpdate"
               @remove="componentOnRemove"
               :templateOptions="templateOptions"
+              :path="`${path}`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -71,13 +68,12 @@
             <component
               :is="component"
               :query="querylocal"
-              :emitRef="emitRef"
               v-else-if="component && functionData.isTemplate"
               ref="elComponent"
               :functionOptions="functionData.functionOptions"
-              @query-update="onQueryUpdate"
               @remove="componentOnRemove"
               :templateOptions="templateOptions"
+              :path="`${path}`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -158,17 +154,8 @@ export default {
       if (this.$refs.elComponent) return this.$refs.elComponent.generateSQL();
       return "";
     },
-    // remove: function() {
-    //   // this.querylocal.type = "";
-    //   this.querylocal = this.getQueryModel();
-    // },
     componentOnRemove: function() {
       this.querylocal = this.getQueryModel();
-    },
-    onQueryUpdate: function(emitRef, value) {
-      this.querylocal = this.normalizeQuery(value);
-      this.$emit("query-update", this.emitRef, this.querylocal);
-      // console.log(emitRef, JSON.stringify(this.querylocal))
     }
   }
 };

@@ -9,7 +9,7 @@
           <slot name="btn-add">+</slot>
         </button>
       </div>
-      <div v-for="(item, index) in querylocal.values" :key="index" class="ml-2">
+      <div v-for="(item, index) in querylocal.values" :key="`${item.uuid}`" class="ml-2">
         <slot name="f-concat-value">
           <div class="d-flex d-flex-row">
             <div class="mr-2">
@@ -24,10 +24,9 @@
             <div class="flex-grow-1">
               <dynamic-selector
                 ref="values_"
-                :emitRef="`values_${index}`"
                 :query="item"
-                @query-update="onQueryUpdate"
                 :templateOptions="templateOptions"
+                :path="`${path}.values[${index}]`"
               >
                 <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
                 <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -61,7 +60,7 @@
       <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
-      <div v-for="(item, index) in querylocal.values" :key="index" class="row ml-2">
+      <div v-for="(item, index) in querylocal.values" :key="`${item.uuid}`" class="row ml-2">
         <div class="d-flex d-flex-row col-xs-12">
           <div class="mr-2">
             <button
@@ -75,10 +74,9 @@
           <div class="flex-grow-1">
             <dynamic-selector
               ref="values_"
-              :emitRef="`values_${index}`"
               :query="item"
-              @query-update="onQueryUpdate"
               :templateOptions="templateOptions"
+              :path="`${path}.values[${index}]`"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -107,6 +105,7 @@ import Placeholder from "./Placeholder.vue";
 
 export default {
   extends: Placeholder,
+  components: {},
   props: {},
   data() {
     return {};
@@ -130,24 +129,11 @@ export default {
         .join(", ");
       return `CONCAT (${values})`;
     },
-    // onQueryUpdate: function(q) {
-    //   this.querylocal.value = this.normalizeQuery(q);
-    // },s
     addItem: function() {
       this.querylocal.values.push(this.getQueryModel());
     },
     removeItem: function(i) {
       this.querylocal.values.splice(i, 1);
-    },
-    onQueryUpdate: function(emitRef, value) {
-      if (emitRef.startsWith("values_")) {
-        let index = emitRef.split("_").pop();
-        this.querylocal.values[index] = this.normalizeQuery(value);
-      } else {
-        this.querylocal[emitRef] = this.normalizeQuery(value);
-      }
-      this.$emit("query-update", this.emitRef, this.querylocal);
-      // console.log(emitRef, JSON.stringify(this.querylocal));
     }
   }
 };
