@@ -1,7 +1,19 @@
 # Vue QB (Query Builder)
--- 
+Your vue query builder
 
-## Feature (Coming Soon)
+## Feature
+- Basic SQL Query Builder
+    - Functions (Selector)
+        - Value,
+        - Concat, Trim
+        - Case
+    - Nested Selector
+    - Generate to SQL
+- Support Template
+    - Bootstrap 3 + Extension
+    - Bootstrap 4 
+
+## TODO
 - Basic SQL Query Builder
     - Functions (Selector)
     - Nested Selector
