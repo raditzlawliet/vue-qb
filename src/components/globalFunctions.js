@@ -1,3 +1,4 @@
+// Available components for rules
 var lFunctions = {
     "": { id: "", component: () => import("@/components/DynamicSelector.vue") },
     "Trim": { id: "Trim", component: () => import("@/components/functions/Trim.vue") },

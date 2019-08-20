@@ -13,6 +13,8 @@
             :query="querylocal.value"
             :templateOptions="templateOptions"
             :path="`${path}.value`"
+            :rules="rules"
+            :depth="depth+1"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -42,6 +44,8 @@
           :query="querylocal.value"
           :templateOptions="templateOptions"
           :path="`${path}.value`"
+          :rules="rules"
+          :depth="depth+1"
         >
           <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
           <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">

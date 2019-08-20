@@ -15,6 +15,8 @@
             @remove="componentOnRemove"
             :templateOptions="templateOptions"
             :path="`${path}`"
+            :rules="rules"
+            :depth="depth"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -30,6 +32,8 @@
             @remove="componentOnRemove"
             :templateOptions="templateOptions"
             :path="`${path}`"
+            :rules="rules"
+            :depth="depth"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -41,7 +45,7 @@
             v-model="querylocal.type"
             v-else
           >
-            <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
+            <option v-for="(r, key) in filteredRules" :key="key" :value="key">{{r.label}}</option>
           </select>
           <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
         </div>
@@ -59,6 +63,8 @@
               @remove="componentOnRemove"
               :templateOptions="templateOptions"
               :path="`${path}`"
+              :rules="rules"
+              :depth="depth"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -74,6 +80,8 @@
               @remove="componentOnRemove"
               :templateOptions="templateOptions"
               :path="`${path}`"
+              :rules="rules"
+              :depth="depth"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -85,7 +93,7 @@
               v-model="querylocal.type"
               v-else
             >
-              <option v-for="f in lFunctions" :key="f.id" :value="f.id">{{f.id}}</option>
+              <option v-for="(r, key) in filteredRules" :key="key" :value="key">{{r.label}}</option>
             </select>
             <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
           </div>
@@ -105,7 +113,10 @@ export default {
   computed: {
     loader() {
       if (this.querylocal.type) {
-        var f = this.lFunctions[this.querylocal.type];
+        var rule = this.rules[this.querylocal.type];
+        // console.log(this.querylocal.type);
+        // console.log(rule);
+        var f = globalFunctions[rule.funcId];
         if (f) {
           if (f.isTemplate) {
             f.component = () => import(`@/components/functions/Placeholder`);
@@ -115,6 +126,19 @@ export default {
         // return () => import(`@/components/functions/${this.querylocal.type}`);
       }
       return null;
+    },
+    filteredRules() {
+      const filtered = Object.keys(this.ruleslocal)
+        .filter(
+          key =>
+            this.depth + 1 <= this.rules[key].maxDepth ||
+            this.rules[key].maxDepth < 0
+        )
+        .reduce((obj, key) => {
+          obj[key] = this.rules[key];
+          return obj;
+        }, {});
+      return filtered;
     }
   },
   mounted() {
@@ -127,7 +151,6 @@ export default {
   },
   data() {
     return {
-      lFunctions: globalFunctions,
       component: null,
       functionData: {}
     };

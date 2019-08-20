@@ -1,6 +1,6 @@
 <template>
   <div :class="[...normalizedTemplateOptions.options.formGroupClass]">
-    <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder">
+    <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder" :rules="rules">
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
         <slot :name="name" v-bind="slotData" />
@@ -129,6 +129,16 @@ export default {
           values: [] // for array
         };
       }
+    },
+    rules: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    },
+    depth: {
+      type: Number,
+      default: () => 0
     }
   },
   watch: {
@@ -144,7 +154,8 @@ export default {
     return {
       templateId: "placeholder",
       querylocal: this.normalizeQuery(this.query),
-      optionslocal: this.normalizeOptions(this.options)
+      optionslocal: this.normalizeOptions(this.options),
+      ruleslocal: this.normalizeRules(this.rules)
     };
   },
   mounted() {},
@@ -199,6 +210,18 @@ export default {
   methods: {
     generateUUID: function() {
       return uuid.v1();
+    },
+    normalizeRules: function(d) {
+      for (var key in d) {
+        d[key] = Object.assign(
+          {
+            label: "",
+            maxDepth: -1
+          },
+          d[key]
+        );
+      }
+      return d;
     },
     normalizeOptions: function(d) {
       return Object.assign(defaultOptions(), d);

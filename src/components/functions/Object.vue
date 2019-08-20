@@ -32,9 +32,16 @@ export default {
   extends: Placeholder,
   props: {},
   data() {
-    return {
-      lObjects: globalSettings.lObjects
-    };
+    return {};
+  },
+  computed: {
+    lObjects() {
+      // console.log(this.ruleslocal);
+      return this.ruleslocal[this.querylocal.type]
+        ? this.ruleslocal[this.querylocal.type].list()
+        : {};
+      // return {};
+    }
   },
   methods: {
     getDefaultObject: function() {

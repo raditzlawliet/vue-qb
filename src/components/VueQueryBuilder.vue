@@ -1,16 +1,20 @@
 <template>
   <div class="vue-qb">
-    <dynamic-selector ref="vqb" :query="query" :templateOptions="templateOptions"></dynamic-selector>
+    <dynamic-selector
+      ref="vqb"
+      :query="query"
+      :templateOptions="templateOptions"
+      :rules="rules"
+    ></dynamic-selector>
   </div>
 </template>
 
 <script>
+import globalSettings from "@/components/globalSettings.js";
 import DynamicSelector from "@/components/DynamicSelector.vue";
 import { vueSet as VueSet } from "vue-deepset";
-import Vue from "vue";
 import { EventBus } from "@/components/event-bus.js";
 
-// console.log(VueSet);
 export default {
   props: {
     templateOptions: {
@@ -18,6 +22,12 @@ export default {
     },
     query: {
       type: Object
+    },
+    rules: {
+      type: Object,
+      default: function() {
+        return globalSettings.lRules;
+      }
     }
   },
   components: {

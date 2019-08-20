@@ -26,15 +26,20 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
-import globalSettings from "@/components/globalSettings.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
-    return {
-      lAttributes: globalSettings.lAttributes
-    };
+    return {};
+  },
+  computed: {
+    lAttributes() {
+      return this.ruleslocal[this.querylocal.type]
+        ? this.ruleslocal[this.querylocal.type].list()
+        : {};
+      // return {};
+    }
   },
   methods: {
     getDefaultObject: function() {
