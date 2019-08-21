@@ -9,7 +9,7 @@
           <slot name="btn-add">+</slot>
         </button>
       </div>
-      <div v-for="(item, index) in query.values" :key="`${item.uuid}`" class="ml-2">
+      <div v-for="(item, index) in query.values" :key="item.uuid" class="ml-2">
         <slot name="f-concat-value">
           <div class="d-flex d-flex-row">
             <div class="mr-2">
@@ -62,7 +62,7 @@
       <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
-      <div v-for="(item, index) in query.values" :key="`${item.uuid}`" class="row ml-2">
+      <div v-for="(item, index) in query.values" :key="item.uuid" class="row ml-2">
         <div class="d-flex d-flex-row col-xs-12">
           <div class="mr-2">
             <button

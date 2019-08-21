@@ -177,8 +177,8 @@ export default {
       return "";
     },
     componentOnRemove: function() {
-      // this.query = this.getQueryModel();
       EventBus.$emit("query-update", this.path, this.getQueryModel());
+      EventBus.$emit("post-query-update", this.path, this.getQueryModel());
     }
   }
 };

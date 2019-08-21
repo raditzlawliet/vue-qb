@@ -2,7 +2,7 @@
   <div class="vue-qb">
     <dynamic-selector
       ref="vqb"
-      :query="query"
+      :query="postQuery"
       :templateOptions="templateOptions"
       :rules="rules"
     ></dynamic-selector>
@@ -14,6 +14,7 @@ import globalSettings from "@/components/globalSettings.js";
 import DynamicSelector from "@/components/DynamicSelector.vue";
 import { vueSet as VueSet } from "vue-deepset";
 import { EventBus } from "@/components/event-bus.js";
+import { uuid } from "vue-uuid";
 
 export default {
   props: {
@@ -36,38 +37,70 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    EventBus.$on("query-update", (path, query) => {
-      // query update inside component
+    // post query update
+    EventBus.$on("post-query-update", (path, query) => {
       if (!path) {
-        this.completeQuery = this.normalizeQuery(query);
-        // this.completeQuery = query;
+        this.postQuery = query;
       } else {
-        VueSet(this.completeQuery, path, this.normalizeQuery(query));
+        VueSet(this.postQuery, path, query);
       }
-      // console.log(path);
-      this.$emit("query-update", this.completeQuery); // emit to root component
+    });
+
+    // for uses
+    EventBus.$on("query-update", (path, query) => {
+      // console.log(path, JSON.stringify(query));
+      if (!query) return;
+      if (!path) {
+        this.resultQuery = JSON.parse(JSON.stringify(query));
+      } else {
+        VueSet(this.resultQuery, path, JSON.parse(JSON.stringify(query)));
+      }
+      this.$emit("query-update", this.resultQuery); // emit to uses
     });
   },
-  watch: {},
+  watch: {
+    query: {
+      handler: function(query) {
+        this.postQuery = this.normalizeQuery(query);
+        this.resultQuery = this.normalizeQuery(query);
+        this.$emit("query-update", this.resultQuery); // emit to uses
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   data() {
     return {
-      completeQuery: this.normalizeQuery(this.query)
+      postQuery: this.normalizeQuery(this.query),
+      resultQuery: this.normalizeQuery(this.query)
     };
   },
   methods: {
+    generateUUID: function() {
+      return uuid.v1();
+    },
     generateSQL: function() {
       if (this.$refs.vqb) return this.$refs.vqb.generateSQL();
       return "";
     },
+    getResultQuery: function() {
+      return this.resultQuery;
+    },
     normalizeQuery: function(d) {
-      return Object.assign(
+      var query = Object.assign(
+        {},
         {
+          uuid: this.generateUUID(),
           type: "", // for type
           value: undefined, // for value
           values: [] // for array
         },
         d
       );
+      query.values.forEach((q, i) => {
+        query.values[i] = this.normalizeQuery(q);
+      });
+      return query;
     }
   }
 };

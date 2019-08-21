@@ -20,6 +20,17 @@ import globalSettings from "@/components/globalSettings.js";
 import { EventBus } from "@/components/event-bus.js";
 import { uuid } from "vue-uuid";
 
+var generateUUID = function() {
+  return uuid.v1();
+};
+var getQueryModel = function() {
+  return {
+    uuid: generateUUID(),
+    type: "", // for type
+    value: undefined, // for value
+    values: [] // for array
+  };
+};
 var defaultOptions = function() {
   return {
     removeable: true
@@ -123,12 +134,9 @@ export default {
     query: {
       type: Object,
       default: function() {
-        return {
-          uuid: uuid.v1(),
-          type: "", // for type
-          value: undefined, // for value
-          values: [] // for array
-        };
+        var query = getQueryModel();
+        EventBus.$emit("query-update", this.path, query);
+        return query;
       }
     },
     rules: {
@@ -143,54 +151,24 @@ export default {
     }
   },
   watch: {
-    // querylocal: {
-    //   handler: function(newVal) {
-    //     EventBus.$emit("query-update", this.path, newVal);
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // }
     query: {
       handler(query) {
         var validQuery = this.normalizeQuery(query);
-        console.log("ValidQuery", validQuery);
         if (!this.compareQuery(validQuery, query)) {
-          EventBus.$emit("query-update", this.path, validQuery);
+          EventBus.$emit("post-query-update", this.path, validQuery);
         }
+        EventBus.$emit("query-update", this.path, validQuery);
       },
       deep: true,
       immediate: true
     }
-    // options: {
-    //   handler(newVal) {
-    //     this.optionslocal = this.normalizeQuery(newVal);
-    //   },
-    //   deep: true,
-    //   immediate: true,
-    // },
-    // rules: {
-    //   handler(newVal) {
-    //     this.ruleslocal = this.normalizeQuery(newVal);
-    //   },
-    //   deep: true,
-    //   immediate: true,
-    // },
   },
   data() {
     return {
       templateId: "placeholder"
-      // querylocal: this.normalizeQuery(this.query),
-      // optionslocal: this.normalizeOptions(this.options),
-      // ruleslocal: this.normalizeRules(this.rules)
     };
   },
-  mounted() {
-    // // force normalize query 1st time every mounted
-    // var validQuery = this.normalizeQuery(newVal);
-    // if (validQuery != newVal) {
-    //   EventBus.$emit("query-update", this.path, validQuery);
-    // }
-  },
+  mounted() {},
   computed: {
     generateSQLNodes() {
       if (this.functionOptions.generateSQL)
@@ -241,9 +219,8 @@ export default {
   },
   methods: {
     compareQuery: function(a, b) {
-      console.log(a, b);
       if (a.type != b.type) return false;
-      if (a.uuid != a.uuid) return false;
+      if (a.uuid != b.uuid) return false;
       if (typeof a.values === "undefined" || typeof b.values === "undefined")
         return a == b;
       if (a.values.length != b.values.length) {
@@ -251,13 +228,12 @@ export default {
       }
       var isValuesValid = true;
       a.values.forEach((_, i) => {
-        if (isValuesValid) this.compareQuery(a.values[i], a.values[i]);
+        if (isValuesValid)
+          isValuesValid = this.compareQuery(a.values[i], b.values[i]);
       });
       return isValuesValid;
     },
-    generateUUID: function() {
-      return uuid.v1();
-    },
+    generateUUID: generateUUID,
     normalizeRules: function(d) {
       for (var key in d) {
         d[key] = Object.assign(
@@ -271,32 +247,16 @@ export default {
       return d;
     },
     normalizeOptions: function(d) {
-      return Object.assign(defaultOptions(), d);
+      return Object.assign({}, defaultOptions(), d);
     },
     normalizeQuery: function(d) {
-      var validQuery = Object.assign(
-        {
-          uuid: this.generateUUID(),
-          type: "", // for type
-          value: undefined, // for value
-          values: [] // for array
-        },
-        d
-      );
+      var validQuery = Object.assign({}, getQueryModel(), d);
       validQuery.values.forEach((q, i) => {
-        validQuery[i] = this.normalizeQuery(q);
-        // if (!v.uuid) v.uuid = this.generateUUID();
+        validQuery.values[i] = this.normalizeQuery(q);
       });
       return validQuery;
     },
-    getQueryModel: function() {
-      return {
-        uuid: this.generateUUID(),
-        type: "", // for type
-        value: undefined, // for value
-        values: [] // for array
-      };
-    },
+    getQueryModel: getQueryModel,
     generateSQL: function() {
       if (!this.generateSQLNodes) return "";
       var sql = "";
@@ -314,16 +274,6 @@ export default {
     remove: function() {
       this.$emit("remove");
     }
-    // manual set param
-    // setQuery: function(d) {
-    //   this.querylocal = this.normalizeQuery(d);
-    // },
-    // setOptions: function(d) {
-    //   this.optionslocal = this.normalizeOptions(d);
-    // },
-    // setRules: function(d) {
-    //   this.ruleslocal = this.normalizeRules(d);
-    // },
   }
 };
 </script>
