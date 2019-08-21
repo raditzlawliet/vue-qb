@@ -186,6 +186,8 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
+import { EventBus } from "@/components/event-bus.js";
+
 export default {
   extends: Placeholder,
   props: {},
@@ -225,9 +227,19 @@ export default {
         whenValue: this.getQueryModel(),
         thenValue: this.getQueryModel()
       });
+      EventBus.$emit(
+        "update:complete-query",
+        this.path + ".values",
+        this.querylocal.values
+      );
     },
     removeItem: function(i) {
       this.querylocal.values.splice(i, 1);
+      EventBus.$emit(
+        "update:complete-query",
+        this.path + ".values",
+        this.querylocal.values
+      );
     }
   }
 };

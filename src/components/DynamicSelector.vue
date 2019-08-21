@@ -178,7 +178,7 @@ export default {
     },
     componentOnRemove: function() {
       this.querylocal = this.getQueryModel();
-      EventBus.$emit("query-update", this.path, this.querylocal);
+      EventBus.$emit("update:complete-query", this.path, this.querylocal);
     }
   }
 };

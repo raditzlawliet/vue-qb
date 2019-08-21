@@ -20,6 +20,17 @@ import globalSettings from "@/components/globalSettings.js";
 import { EventBus } from "@/components/event-bus.js";
 import { uuid } from "vue-uuid";
 
+var generateUUID = function() {
+  return uuid.v1();
+};
+var getQueryModel = function() {
+  return {
+    uuid: generateUUID(),
+    type: "",
+    value: undefined,
+    values: []
+  };
+};
 var defaultOptions = function() {
   return {
     removeable: true
@@ -123,11 +134,8 @@ export default {
     query: {
       type: Object,
       default: function() {
-        return {
-          type: "", // for type
-          // value: undefined, // for value
-          values: [] // for array
-        };
+        var query = getQueryModel();
+        return query;
       }
     },
     rules: {
@@ -142,9 +150,19 @@ export default {
     }
   },
   watch: {
+    query: {
+      handler: function(v) {
+        var nQuery = this.normalizeQuery(v);
+        if (JSON.stringify(this.querylocal) != JSON.stringify(nQuery)) {
+          this.querylocal = nQuery;
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     querylocal: {
       handler: function(newVal) {
-        EventBus.$emit("query-update", this.path, newVal);
+        EventBus.$emit("update:complete-query", this.path, newVal);
       },
       deep: true,
       immediate: true
@@ -158,7 +176,12 @@ export default {
       ruleslocal: this.normalizeRules(this.rules)
     };
   },
-  mounted() {},
+  mounted() {
+    // forcing all component to update querylocal
+    EventBus.$on("update:query", query => {
+      this.querylocal = this.normalizeQuery(this.query);
+    });
+  },
   computed: {
     generateSQLNodes() {
       if (this.functionOptions.generateSQL)
@@ -208,9 +231,7 @@ export default {
     }
   },
   methods: {
-    generateUUID: function() {
-      return uuid.v1();
-    },
+    generateUUID: generateUUID,
     normalizeRules: function(d) {
       for (var key in d) {
         d[key] = Object.assign(
@@ -233,14 +254,7 @@ export default {
       });
       return validQuery;
     },
-    getQueryModel: function() {
-      return {
-        uuid: this.generateUUID(),
-        type: "",
-        value: undefined,
-        values: []
-      };
-    },
+    getQueryModel: getQueryModel,
     generateSQL: function() {
       if (!this.generateSQLNodes) return "";
       var sql = "";

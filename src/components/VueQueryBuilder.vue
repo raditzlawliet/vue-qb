@@ -38,20 +38,35 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    EventBus.$on("query-update", (path, query) => {
+    EventBus.$on("update:complete-query", (path, query) => {
+      console.log(
+        "EB$on:update:complete-query",
+        path,
+        JSON.stringify(query, null, "\t")
+      );
       if (!path) {
         this.completeQuery = deepClone(query);
       } else {
         VueSet(this.completeQuery, path, deepClone(query));
       }
-      this.$emit("query-update", this.completeQuery);
+      this.$emit("update:complete-query", this.completeQuery);
     });
   },
   watch: {
     query: {
       handler: function(v) {
-        this.normalizedQuery = deepClone(this.normalizeQuery(v));
+        var nQuery = this.normalizeQuery(v);
+        if (JSON.stringify(this.normalizedQuery) != JSON.stringify(nQuery)) {
+          this.normalizedQuery = deepClone(nQuery);
+        }
         this.completeQuery = deepClone(this.normalizedQuery);
+        // if (JSON.stringify(this.normalizedQuery) != JSON.stringify(v)) {
+        //   console.log(
+        //     "EB:update:query",
+        //     JSON.stringify(this.normalizedQuery, null, "\t")
+        //   );
+        //   EventBus.$emit("update:query", this.normalizedQuery);
+        // }
       },
       deep: true,
       immediate: true
@@ -91,5 +106,4 @@ export default {
 </script>
 
 <style lang="scss">
-// @import "../assets/sass/mixins.scss";
 </style>

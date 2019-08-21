@@ -10,7 +10,7 @@
           <vue-query-builder
             ref="foo"
             :query="query"
-            @query-update="onQueryUpdate"
+            @update:complete-query="onQueryUpdate"
             :templateOptions="templateOptions"
           ></vue-query-builder>
 
@@ -47,13 +47,7 @@ export default {
         values: [],
         value: {
           type: "Concat",
-          values: [
-            { type: "Value", value: "123" },
-            { type: "Object", values: [] },
-            { type: "Attribute", values: [] },
-            { type: "Case", values: [] },
-            { type: "Trim", values: [] }
-          ]
+          values: []
         }
       }
     };
@@ -71,6 +65,21 @@ export default {
     setTimeout(() => {
       this.generateSQL();
       this.generatedJSON = JSON.stringify(this.query);
+
+      this.query = {
+        type: "Trim",
+        values: [],
+        value: {
+          type: "Concat",
+          values: [
+            { type: "Value", value: "123" },
+            { type: "Object", values: [] },
+            { type: "Attribute", values: [] },
+            { type: "Case", values: [] },
+            { type: "Trim", values: [] }
+          ]
+        }
+      };
     }, 250);
   }
 };

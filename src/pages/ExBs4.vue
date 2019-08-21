@@ -8,13 +8,13 @@
           <!-- <dynamic-selector
             ref="foo"
             :query="query"
-            @query-update="onQueryUpdate"
+            @update:complete-query="onQueryUpdate"
             :templateOptions="templateOptions"
           ></dynamic-selector>-->
           <vue-query-builder
             ref="foo"
             :query="queryComplex"
-            @query-update="onQueryUpdate"
+            @update:complete-query="onQueryUpdate"
             :template-options="templateOptions"
           ></vue-query-builder>
           <hr />

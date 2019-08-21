@@ -5,7 +5,7 @@
     <dynamic-selector
       ref="foo"
       :query="query2"
-      @query-update="onQueryUpdate2"
+      @update:complete-query="onQueryUpdate2"
       :templateOptions="templateOptions2"
     ></dynamic-selector>
     <hr />

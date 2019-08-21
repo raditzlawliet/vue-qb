@@ -135,7 +135,7 @@ export default {
     addItem: function() {
       this.querylocal.values.push(this.getQueryModel());
       EventBus.$emit(
-        "query-update",
+        "update:complete-query",
         this.path + ".values",
         this.querylocal.values
       );
@@ -143,7 +143,7 @@ export default {
     removeItem: function(i) {
       this.querylocal.values.splice(i, 1);
       EventBus.$emit(
-        "query-update",
+        "update:complete-query",
         this.path + ".values",
         this.querylocal.values
       );
