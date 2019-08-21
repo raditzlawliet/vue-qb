@@ -39,11 +39,11 @@ export default {
   mounted() {},
   created() {
     EventBus.$on("update:complete-query", (path, query) => {
-      console.log(
-        "EB$on:update:complete-query",
-        path,
-        JSON.stringify(query, null, "\t")
-      );
+      // console.log(
+      //   "EB$on:update:complete-query",
+      //   path,
+      //   JSON.stringify(query, null, "\t")
+      // );
       if (!path) {
         this.completeQuery = deepClone(query);
       } else {
