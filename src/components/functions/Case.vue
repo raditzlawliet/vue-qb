@@ -8,7 +8,7 @@
         </button>
       </div>
       <div
-        v-for="(whenThen, index) in query.values"
+        v-for="(whenThen, index) in querylocal.values"
         :key="whenThen.uuid"
         class="form-row d-flex d-flex-row mb-0 ml-1"
       >
@@ -66,7 +66,7 @@
           <div class="ml-2">
             <dynamic-selector
               ref="elseValue"
-              :query="query.elseValue"
+              :query="querylocal.elseValue"
               :templateOptions="templateOptions"
               :path="`${path}.elseValue`"
               :rules="rules"
@@ -85,7 +85,7 @@
       </slot>
       <button
         :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-        v-show="options.removeable && query.type"
+        v-show="optionslocal.removeable && querylocal.type"
         @click="remove"
       >
         <slot name="btn-remove">X</slot>
@@ -99,7 +99,7 @@
         </button>
       </div>
       <div
-        v-for="(whenThen, index) in query.values"
+        v-for="(whenThen, index) in querylocal.values"
         :key="whenThen.uuid"
         class="form-row d-flex d-flex-row mb-0 ml-1"
       >
@@ -157,7 +157,7 @@
           <div class="ml-2">
             <dynamic-selector
               ref="elseValue"
-              :query="query.elseValue"
+              :query="querylocal.elseValue"
               :templateOptions="templateOptions"
               :path="`${path}.elseValue`"
               :rules="rules"
@@ -176,7 +176,7 @@
       </slot>
       <button
         :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-        v-show="options.removeable && query.type"
+        v-show="optionslocal.removeable && querylocal.type"
         @click="remove"
       >
         <slot name="btn-remove">X</slot>
@@ -186,23 +186,21 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
-import { EventBus } from "@/components/event-bus.js";
-
-  export default {
+export default {
   extends: Placeholder,
   props: {},
   data() {
     return {};
   },
   created() {
-    if (this.query.values.length == 0) this.addItem();
+    if (this.querylocal.values.length == 0) this.addItem();
   },
   updated() {
-    if (this.query.values.length == 0) this.addItem();
+    if (this.querylocal.values.length == 0) this.addItem();
   },
   methods: {
     generateSQL: function() {
-      var whenThenValues = this.query.values
+      var whenThenValues = this.querylocal.values
         .map((v, i) => {
           var whenValue = this.$refs.whenValue_[i]
             ? this.$refs.whenValue_[i].generateSQL()
@@ -222,24 +220,14 @@ import { EventBus } from "@/components/event-bus.js";
       `;
     },
     addItem: function() {
-      // this.query.values.push({
-      //   uuid: this.generateUUID(),
-      //   whenValue: this.getQueryModel(),
-      //   thenValue: this.getQueryModel()
-      // });
-      var manipulatedQuery = this.query.values;
-      manipulatedQuery.push({
+      this.querylocal.values.push({
         uuid: this.generateUUID(),
         whenValue: this.getQueryModel(),
         thenValue: this.getQueryModel()
       });
-      EventBus.$emit("query-update", this.path + ".values", manipulatedQuery);
     },
     removeItem: function(i) {
-      // this.query.values.splice(i, 1);
-      var manipulatedQuery = this.query.values;
-      manipulatedQuery.splice(i, 1);
-      EventBus.$emit("query-update", this.path + ".values", manipulatedQuery);
+      this.querylocal.values.splice(i, 1);
     }
   }
 };

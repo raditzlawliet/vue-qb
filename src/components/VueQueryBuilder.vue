@@ -2,7 +2,7 @@
   <div class="vue-qb">
     <dynamic-selector
       ref="vqb"
-      :query="postQuery"
+      :query="normalizedQuery"
       :templateOptions="templateOptions"
       :rules="rules"
     ></dynamic-selector>
@@ -14,6 +14,7 @@ import globalSettings from "@/components/globalSettings.js";
 import DynamicSelector from "@/components/DynamicSelector.vue";
 import { vueSet as VueSet } from "vue-deepset";
 import { EventBus } from "@/components/event-bus.js";
+import deepClone from "@/utilities.js";
 import { uuid } from "vue-uuid";
 
 export default {
@@ -37,33 +38,20 @@ export default {
   computed: {},
   mounted() {},
   created() {
-    // post query update
-    EventBus.$on("post-query-update", (path, query) => {
-      if (!path) {
-        this.postQuery = query;
-      } else {
-        VueSet(this.postQuery, path, query);
-      }
-    });
-
-    // for uses
     EventBus.$on("query-update", (path, query) => {
-      // console.log(path, JSON.stringify(query));
-      if (!query) return;
       if (!path) {
-        this.resultQuery = JSON.parse(JSON.stringify(query));
+        this.completeQuery = deepClone(query);
       } else {
-        VueSet(this.resultQuery, path, JSON.parse(JSON.stringify(query)));
+        VueSet(this.completeQuery, path, deepClone(query));
       }
-      this.$emit("query-update", this.resultQuery); // emit to uses
+      this.$emit("query-update", this.completeQuery);
     });
   },
   watch: {
     query: {
-      handler: function(query) {
-        this.postQuery = this.normalizeQuery(query);
-        this.resultQuery = this.normalizeQuery(query);
-        this.$emit("query-update", this.resultQuery); // emit to uses
+      handler: function(v) {
+        this.normalizedQuery = deepClone(this.normalizeQuery(v));
+        this.completeQuery = deepClone(this.normalizedQuery);
       },
       deep: true,
       immediate: true
@@ -71,8 +59,8 @@ export default {
   },
   data() {
     return {
-      postQuery: this.normalizeQuery(this.query),
-      resultQuery: this.normalizeQuery(this.query)
+      normalizedQuery: {},
+      completeQuery: {}
     };
   },
   methods: {
@@ -83,24 +71,20 @@ export default {
       if (this.$refs.vqb) return this.$refs.vqb.generateSQL();
       return "";
     },
-    getResultQuery: function() {
-      return this.resultQuery;
-    },
     normalizeQuery: function(d) {
-      var query = Object.assign(
-        {},
+      var validQuery = Object.assign(
         {
           uuid: this.generateUUID(),
-          type: "", // for type
-          value: undefined, // for value
-          values: [] // for array
+          type: "",
+          value: undefined,
+          values: []
         },
         d
       );
-      query.values.forEach((q, i) => {
-        query.values[i] = this.normalizeQuery(q);
+      validQuery.values.forEach((v, i) => {
+        validQuery.values[i] = this.normalizeQuery(v);
       });
-      return query;
+      return validQuery;
     }
   }
 };

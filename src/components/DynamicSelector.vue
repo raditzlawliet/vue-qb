@@ -9,7 +9,7 @@
         <div class="form-group col-12 mb-2">
           <component
             :is="component"
-            :query="query"
+            :query="querylocal"
             v-if="component && !functionData.isTemplate"
             ref="elComponent"
             @remove="componentOnRemove"
@@ -25,7 +25,7 @@
           </component>
           <component
             :is="component"
-            :query="query"
+            :query="querylocal"
             v-else-if="component && functionData.isTemplate"
             ref="elComponent"
             :functionOptions="functionData.functionOptions"
@@ -42,12 +42,12 @@
           </component>
           <select
             :class="[...normalizedTemplateOptions.options.selectClass]"
-            v-model="query.type"
+            v-model="querylocal.type"
             v-else
           >
             <option v-for="(r, key) in filteredRules" :key="key" :value="key">{{r.label}}</option>
           </select>
-          <!-- <button class="btn btn-danger btn-sm" v-show="removeable && query.type" @click="remove">X</button> -->
+          <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
         </div>
       </div>
     </form>
@@ -57,7 +57,7 @@
           <div class="mb-2 pl-1 border-left border-primary rounded">
             <component
               :is="component"
-              :query="query"
+              :query="querylocal"
               v-if="component && !functionData.isTemplate"
               ref="elComponent"
               @remove="componentOnRemove"
@@ -73,7 +73,7 @@
             </component>
             <component
               :is="component"
-              :query="query"
+              :query="querylocal"
               v-else-if="component && functionData.isTemplate"
               ref="elComponent"
               :functionOptions="functionData.functionOptions"
@@ -90,12 +90,12 @@
             </component>
             <select
               :class="[...normalizedTemplateOptions.options.selectClass]"
-              v-model="query.type"
+              v-model="querylocal.type"
               v-else
             >
               <option v-for="(r, key) in filteredRules" :key="key" :value="key">{{r.label}}</option>
             </select>
-            <!-- <button class="btn btn-danger btn-sm" v-show="removeable && query.type" @click="remove">X</button> -->
+            <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
           </div>
         </div>
       </div>
@@ -113,8 +113,8 @@ export default {
   props: {},
   computed: {
     loader() {
-      if (this.query.type) {
-        var rule = this.rules[this.query.type];
+      if (this.querylocal.type) {
+        var rule = this.rules[this.querylocal.type];
         var f = globalFunctions[rule.funcId];
         if (f) {
           if (f.isTemplate) {
@@ -122,12 +122,12 @@ export default {
           }
           if (f.component) return f;
         }
-        // return () => import(`@/components/functions/${this.query.type}`);
+        // return () => import(`@/components/functions/${this.querylocal.type}`);
       }
       return null;
     },
     filteredRules() {
-      const filtered = Object.keys(this.rules)
+      const filtered = Object.keys(this.ruleslocal)
         .filter(
           key =>
             this.depth + 1 <= this.rules[key].maxDepth ||
@@ -144,7 +144,7 @@ export default {
     this.loadComponent();
   },
   watch: {
-    "query.type": function() {
+    "querylocal.type": function() {
       this.loadComponent();
     }
   },
@@ -177,8 +177,8 @@ export default {
       return "";
     },
     componentOnRemove: function() {
-      EventBus.$emit("query-update", this.path, this.getQueryModel());
-      EventBus.$emit("post-query-update", this.path, this.getQueryModel());
+      this.querylocal = this.getQueryModel();
+      EventBus.$emit("query-update", this.path, this.querylocal);
     }
   }
 };

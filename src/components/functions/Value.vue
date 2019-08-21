@@ -5,12 +5,15 @@
       v-if="['bs3', 'bs4'].includes(normalizedTemplateOptions.template)"
     >
       <div class="flex-grow-1">
-        <input :class="[...normalizedTemplateOptions.options.inputClass]" v-model="query.value" />
+        <input
+          :class="[...normalizedTemplateOptions.options.inputClass]"
+          v-model="querylocal.value"
+        />
       </div>
       <div class="ml-2">
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="options.removeable && query.type"
+          v-show="optionslocal.removeable && querylocal.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>
@@ -30,7 +33,7 @@ export default {
   },
   methods: {
     generateSQL: function() {
-      return this.query.value ? this.query.value : "";
+      return this.querylocal.value ? this.querylocal.value : "";
     }
   }
 };
