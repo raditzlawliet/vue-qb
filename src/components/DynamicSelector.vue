@@ -123,6 +123,7 @@ export default {
           if (f.component) return f;
         }
         // return () => import(`@/components/functions/${this.querylocal.type}`);
+        // return () => import(`@/components/functions/Value`);
       }
       return null;
     },
@@ -144,8 +145,11 @@ export default {
     this.loadComponent();
   },
   watch: {
-    "querylocal.type": function() {
-      this.loadComponent();
+    "querylocal.type": {
+      handler: function(v) {
+        this.loadComponent();
+      },
+      immediate: true
     }
   },
   data() {

@@ -43,12 +43,12 @@ export default {
         template: "bs3"
       },
       query: {
-        type: "Trim",
-        values: [],
-        value: {
-          type: "Concat",
-          values: []
-        }
+        // type: "Trim",
+        // values: [],
+        // value: {
+        //   type: "Concat",
+        //   values: []
+        // }
       }
     };
   },
@@ -62,24 +62,23 @@ export default {
     }
   },
   mounted() {
+    this.query = {
+      // type: "Trim",
+      // values: [],
+      // value: {
+      //   type: "Concat",
+      //   values: [
+      //     { type: "Value", value: "123" },
+      //     { type: "Object", values: [] },
+      //     { type: "Attribute", values: [] },
+      //     { type: "Case", values: [] },
+      //     { type: "Trim", values: [] }
+      //   ]
+      // }
+    };
     setTimeout(() => {
       this.generateSQL();
       this.generatedJSON = JSON.stringify(this.query);
-
-      this.query = {
-        type: "Trim",
-        values: [],
-        value: {
-          type: "Concat",
-          values: [
-            { type: "Value", value: "123" },
-            { type: "Object", values: [] },
-            { type: "Attribute", values: [] },
-            { type: "Case", values: [] },
-            { type: "Trim", values: [] }
-          ]
-        }
-      };
     }, 250);
   }
 };

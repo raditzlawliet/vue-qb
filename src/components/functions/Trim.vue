@@ -72,7 +72,7 @@ export default {
   props: {},
   data() {
     return {
-      templateId: "trim"
+      templateId: "Trim"
     };
   },
   methods: {

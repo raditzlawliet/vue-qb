@@ -23,8 +23,9 @@
             </div>
             <div class="flex-grow-1">
               <dynamic-selector
+                @update:query="(q) => onUpdateQueryLocal(index, q)"
                 ref="values_"
-                :query="item"
+                :query="querylocal.values[index]"
                 :templateOptions="templateOptions"
                 :path="`${path}.values[${index}]`"
                 :rules="rules"
@@ -62,7 +63,7 @@
       <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
-      <div v-for="(item, index) in querylocal.values" :key="`${item.uuid}`" class="row ml-2">
+      <div v-for="(item, index) in querylocal.values" :key="`${index}`" class="row ml-2">
         <div class="d-flex d-flex-row col-xs-12">
           <div class="mr-2">
             <button
@@ -75,8 +76,9 @@
           </div>
           <div class="flex-grow-1">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(index, q)"
               ref="values_"
-              :query="item"
+              :query="querylocal.values[index]"
               :templateOptions="templateOptions"
               :path="`${path}.values[${index}]`"
               :rules="rules"
@@ -110,10 +112,12 @@ import { EventBus } from "@/components/event-bus.js";
 
 export default {
   extends: Placeholder,
-  components: {},
+  // components: {},
   props: {},
   data() {
-    return {};
+    return {
+      templateId: "Concat"
+    };
   },
   created() {
     if (this.querylocal.values.length == 0) this.addItem();
@@ -141,13 +145,21 @@ export default {
       );
     },
     removeItem: function(i) {
+      // this.querylocal.values.splice(
+      //   this.querylocal.values.findIndex(v => v.uuid == item.uuid),
+      //   1
+      // );
       this.querylocal.values.splice(i, 1);
       EventBus.$emit(
         "update:complete-query",
         this.path + ".values",
         this.querylocal.values
       );
-    }
+    },
+    onUpdateQueryLocal: function(i, query) {
+      // console.log(i, query);
+      // this.querylocal.values[i] = query;
+    },
   }
 };
 </script>

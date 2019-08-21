@@ -31,7 +31,7 @@ var lRules = {
     funcId: "Case",
     type: "statement",
     label: "Case",
-    maxDepth: 1,
+    maxDepth: -1,
     list: () => {
       return lObjects;
     }
@@ -39,13 +39,13 @@ var lRules = {
   "Trim": {
     funcId: "Trim",
     type: "function",
-    maxDepth: 1,
+    maxDepth: -1,
     label: "Trim",
   },
   "Concat": {
     funcId: "Concat",
     type: "function",
-    maxDepth: 1,
+    maxDepth: -1,
     label: "Concat",
   },
   "Object": {

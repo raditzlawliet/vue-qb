@@ -19,6 +19,7 @@
 import globalSettings from "@/components/globalSettings.js";
 import { EventBus } from "@/components/event-bus.js";
 import { uuid } from "vue-uuid";
+import deepClone from "@/utilities.js";
 
 var generateUUID = function() {
   return uuid.v1();
@@ -163,6 +164,7 @@ export default {
     querylocal: {
       handler: function(newVal) {
         EventBus.$emit("update:complete-query", this.path, newVal);
+        this.$emit("update:query", newVal);
       },
       deep: true,
       immediate: true
@@ -171,16 +173,16 @@ export default {
   data() {
     return {
       templateId: "placeholder",
-      querylocal: this.normalizeQuery(this.query),
+      querylocal: deepClone(this.normalizeQuery(this.query)),
       optionslocal: this.normalizeOptions(this.options),
       ruleslocal: this.normalizeRules(this.rules)
     };
   },
   mounted() {
     // forcing all component to update querylocal
-    EventBus.$on("update:query", query => {
-      this.querylocal = this.normalizeQuery(this.query);
-    });
+    // EventBus.$on("update:query", query => {
+    //   this.querylocal = this.normalizeQuery(this.query);
+    // });
   },
   computed: {
     generateSQLNodes() {
@@ -250,7 +252,15 @@ export default {
     normalizeQuery: function(d) {
       var validQuery = Object.assign({}, this.getQueryModel(), d);
       validQuery.values.forEach((v, i) => {
-        validQuery.values[i] = this.normalizeQuery(v);
+        // var validQueryInside = this.normalizeQuery(v);
+        // if (
+        //   JSON.stringify(
+        //     validQuery.values[i] != JSON.stringify(validQueryInside)
+        //   )
+        // )
+        //   validQuery.values.splice(i, 1, validQueryInside);
+        // validQuery.values[i] = this.normalizeQuery(v);
+        if (!v.uuid) v.uuid = this.generateUUID();
       });
       return validQuery;
     },
