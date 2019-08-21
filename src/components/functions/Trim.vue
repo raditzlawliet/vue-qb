@@ -10,7 +10,7 @@
         <slot name="f-trim-value">
           <dynamic-selector
             ref="value"
-            :query="querylocal.value"
+            :query="query.value"
             :templateOptions="templateOptions"
             :path="`${path}.value`"
             :rules="rules"
@@ -29,7 +29,7 @@
         </slot>
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
+          v-show="options.removeable && query.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>
@@ -41,7 +41,7 @@
       <div class="ml-2">
         <dynamic-selector
           ref="value"
-          :query="querylocal.value"
+          :query="query.value"
           :templateOptions="templateOptions"
           :path="`${path}.value`"
           :rules="rules"
@@ -56,7 +56,7 @@
       <label class="control-label input-sm">)</label>
       <button
         :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-        v-show="optionslocal.removeable && querylocal.type"
+        v-show="options.removeable && query.type"
         @click="remove"
       >
         <slot name="btn-remove">X</slot>

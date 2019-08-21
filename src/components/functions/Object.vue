@@ -5,17 +5,14 @@
       v-if="['bs4', 'bs3'].includes(normalizedTemplateOptions.template)"
     >
       <div class="flex-grow-1">
-        <select
-          :class="[...normalizedTemplateOptions.options.selectClass]"
-          v-model="querylocal.value"
-        >
+        <select :class="[...normalizedTemplateOptions.options.selectClass]" v-model="query.value">
           <option v-for="o in lObjects" :key="o.id" :value="o.id">{{o.name}}</option>
         </select>
       </div>
       <div class="ml-2">
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
+          v-show="options.removeable && query.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>
@@ -26,7 +23,6 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
-import globalSettings from "@/components/globalSettings.js";
 
 export default {
   extends: Placeholder,
@@ -36,9 +32,9 @@ export default {
   },
   computed: {
     lObjects() {
-      // console.log(this.ruleslocal);
-      return this.ruleslocal[this.querylocal.type]
-        ? this.ruleslocal[this.querylocal.type].list()
+      // console.log(this.rules);
+      return this.rules[this.query.type]
+        ? this.rules[this.query.type].list()
         : {};
       // return {};
     }
@@ -51,7 +47,7 @@ export default {
       };
     },
     generateSQL: function() {
-      return this.querylocal.value ? this.querylocal.value : "";
+      return this.query.value ? this.query.value : "";
     }
   }
 };

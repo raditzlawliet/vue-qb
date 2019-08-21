@@ -9,7 +9,7 @@
           <slot name="btn-add">+</slot>
         </button>
       </div>
-      <div v-for="(item, index) in querylocal.values" :key="`${item.uuid}`" class="ml-2">
+      <div v-for="(item, index) in query.values" :key="`${item.uuid}`" class="ml-2">
         <slot name="f-concat-value">
           <div class="d-flex d-flex-row">
             <div class="mr-2">
@@ -50,7 +50,7 @@
         </slot>
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
+          v-show="options.removeable && query.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>
@@ -62,7 +62,7 @@
       <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
-      <div v-for="(item, index) in querylocal.values" :key="`${item.uuid}`" class="row ml-2">
+      <div v-for="(item, index) in query.values" :key="`${item.uuid}`" class="row ml-2">
         <div class="d-flex d-flex-row col-xs-12">
           <div class="mr-2">
             <button
@@ -95,7 +95,7 @@
         <label class="control-label input-sm">)</label>
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
+          v-show="options.removeable && query.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>
@@ -106,6 +106,7 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
+import { EventBus } from "@/components/event-bus.js";
 
 export default {
   extends: Placeholder,
@@ -115,14 +116,14 @@ export default {
     return {};
   },
   created() {
-    if (this.querylocal.values.length == 0) this.addItem();
+    if (this.query.values.length == 0) this.addItem();
   },
   updated() {
-    if (this.querylocal.values.length == 0) this.addItem();
+    if (this.query.values.length == 0) this.addItem();
   },
   methods: {
     generateSQL: function() {
-      var values = this.querylocal.values
+      var values = this.query.values
         .map((v, i) => {
           // console.log(this.$refs.value_[i], i);
           // dont know why ref already scope in array
@@ -134,10 +135,23 @@ export default {
       return `CONCAT (${values})`;
     },
     addItem: function() {
-      this.querylocal.values.push(this.getQueryModel());
+      // this.query.values.push(this.getQueryModel());
+      var manipulatedQuery = this.query.values;
+      manipulatedQuery.push(this.getQueryModel());
+      EventBus.$emit("query-update", this.path + ".values", manipulatedQuery);
+      // EventBus.$emit(
+      //   "query-update-array",
+      //   this.path + ".values",
+      //   "push",
+      //   this.getQueryModel()
+      // );
     },
     removeItem: function(i) {
-      this.querylocal.values.splice(i, 1);
+      // this.query.values.splice(i, 1);
+      var manipulatedQuery = this.query.values;
+      manipulatedQuery.splice(i, 1);
+      EventBus.$emit("query-update", this.path + ".values", manipulatedQuery);
+      // EventBus.$emit("query-update-array", this.path + ".values", "remove", i);
     }
   }
 };
