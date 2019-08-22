@@ -66,18 +66,36 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
+import { replaceTemplate } from "@/utilities.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
     return {
-      templateId: "Trim"
+      templateId: "Trim",
+      defaultSqlFormat: "TRIM ({{value}})"
     };
   },
+  computed: {
+    sqlFormatScoped() {
+      return replaceTemplate(this.sqlFormat, {
+        value: `{{${this.querylocal.uuid}}}`
+      });
+    }
+  },
   methods: {
+    // generateStructuredSQL: function() {
+    //   var sqlFormatScoped = this.sqlFormatScoped;
+    //   var values = {};
+    //   values[this.querylocal.uuid] = this.$refs.value.generateSQL(isObject);
+    //   return { sql: replaceTemplate(sqlFormatScoped, values), values: values };
+    // },
     generateSQL: function() {
-      return `TRIM (${this.$refs.value.generateSQL()})`;
+      return replaceTemplate(this.sqlFormat, {
+        value: this.$refs.value.generateSQL()
+      });
+      // return `TRIM (${this.$refs.value.generateSQL()})`;
     }
   }
 };

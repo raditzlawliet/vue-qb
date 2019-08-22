@@ -25,6 +25,7 @@
           <label class="col-form-label col-form-label-sm">WHEN (</label>
           <div class="ml-2">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(whenThen.whenValue, q)"
               ref="whenValue_"
               :query="whenThen.whenValue"
               :templateOptions="templateOptions"
@@ -43,6 +44,7 @@
           <label class="col-form-label col-form-label-sm">THEN</label>
           <div class="ml-2">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(whenThen.thenValue, q)"
               ref="thenValue_"
               :query="whenThen.thenValue"
               :templateOptions="templateOptions"
@@ -65,6 +67,7 @@
           </div>
           <div class="ml-2">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(querylocal.elseValue, q)"
               ref="elseValue"
               :query="querylocal.elseValue"
               :templateOptions="templateOptions"
@@ -116,6 +119,7 @@
           <label class="control-label input-sm">WHEN</label>
           <div class="ml-2">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(whenThen.whenValue, q)"
               ref="whenValue_"
               :query="whenThen.whenValue"
               :templateOptions="templateOptions"
@@ -134,6 +138,7 @@
           <label class="control-label input-sm">THEN</label>
           <div class="ml-2">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(whenThen.thenValue, q)"
               ref="thenValue_"
               :query="whenThen.thenValue"
               :templateOptions="templateOptions"
@@ -156,6 +161,7 @@
           </div>
           <div class="ml-2">
             <dynamic-selector
+              @update:query="(q) => onUpdateQueryLocal(querylocal.elseValue, q)"
               ref="elseValue"
               :query="querylocal.elseValue"
               :templateOptions="templateOptions"
@@ -187,6 +193,7 @@
 <script>
 import Placeholder from "./Placeholder.vue";
 import { EventBus } from "@/components/event-bus.js";
+import { deepClone } from "@/utilities.js";
 
 export default {
   extends: Placeholder,
@@ -214,12 +221,10 @@ export default {
         })
         .join("\n");
 
-      return `
-        CASE
-          ${whenThenValues}
-          ELSE ${this.$refs.elseValue.generateSQL()}
-          END
-      `;
+      return `CASE
+  ${whenThenValues}
+  ELSE ${this.$refs.elseValue.generateSQL()}
+END`;
     },
     addItem: function() {
       this.querylocal.values.push({
@@ -240,6 +245,11 @@ export default {
         this.path + ".values",
         this.querylocal.values
       );
+    },
+    onUpdateQueryLocal: function(oldQuery, query) {
+      // console.log(i, query);
+      // this.querylocal.values.splice(i, 1, deepClone(query));
+      oldQuery = deepClone(query);
     }
   }
 };

@@ -1,5 +1,5 @@
 import ExPage from '@/pages/ExPage'
-import Ex from '@/pages/Ex'
+// import Ex from '@/pages/Ex'
 import ExBs3 from '@/pages/ExBs3'
 import ExBs4 from '@/pages/ExBs4'
 

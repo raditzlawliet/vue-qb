@@ -19,7 +19,7 @@
 import globalSettings from "@/components/globalSettings.js";
 import { EventBus } from "@/components/event-bus.js";
 import { uuid } from "vue-uuid";
-import deepClone from "@/utilities.js";
+import { deepClone } from "@/utilities.js";
 
 var generateUUID = function() {
   return uuid.v1();
@@ -175,7 +175,8 @@ export default {
       templateId: "placeholder",
       querylocal: this.normalizeQuery(this.query),
       optionslocal: this.normalizeOptions(this.options),
-      ruleslocal: this.normalizeRules(this.rules)
+      ruleslocal: this.normalizeRules(this.rules),
+      defaultSqlFormat: "" ,
     };
   },
   mounted() {
@@ -185,6 +186,13 @@ export default {
     // });
   },
   computed: {
+    sqlFormat() {
+      return this.rules.sqlFormat || this.defaultSqlFormat;
+    },
+    // parsing from rules standard sql format into sql with id for replacer
+    sqlFormatScoped() {
+      return this.sqlFormat;
+    },
     generateSQLNodes() {
       if (this.functionOptions.generateSQL)
         return this.functionOptions.generateSQL.split(/#([\w]+)/);

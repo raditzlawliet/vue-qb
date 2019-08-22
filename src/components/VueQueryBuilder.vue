@@ -14,7 +14,7 @@ import globalSettings from "@/components/globalSettings.js";
 import DynamicSelector from "@/components/DynamicSelector.vue";
 import { vueSet as VueSet } from "vue-deepset";
 import { EventBus } from "@/components/event-bus.js";
-import deepClone from "@/utilities.js";
+import { deepClone } from "@/utilities.js";
 import { uuid } from "vue-uuid";
 
 export default {
@@ -80,11 +80,14 @@ export default {
     };
   },
   methods: {
+    getCompleteQuery: function() {
+      return deepClone(this.completeQuery);
+    },
     generateUUID: function() {
       return uuid.v1();
     },
-    generateSQL: function() {
-      if (this.$refs.vqb) return this.$refs.vqb.generateSQL();
+    generateSQL: function(isObject) {
+      if (this.$refs.vqb) return this.$refs.vqb.generateSQL(isObject);
       return "";
     },
     normalizeQuery: function(d) {

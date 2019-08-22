@@ -6,11 +6,12 @@
 // `
 
 var lObjects = {
-  "Some Object": { id: "Some Object", name: "Some Object" },
+  "Some Object": { id: "Some Object", name: "Some Object", sqlValue: "Hehe" },
+  "Some Object1": { id: "Some Object1", name: "Some Object1", sqlValue: "Hehe1" },
 };
 
 var lAttributes = {
-  "Some Attribute": { id: "Some Attribute", name: "Some Attribute" },
+  "Some Attribute": { id: "Some Attribute", name: "Some Attribute", sqlValue: "Hehe" },
 };
 
 // for recursive scope, will include for isTemplate=true
@@ -46,7 +47,7 @@ var lRules = {
     funcId: "Concat",
     type: "function",
     maxDepth: -1,
-    label: "Concat",
+      label: "Concat",
   },
   "Object": {
     funcId: "Object",

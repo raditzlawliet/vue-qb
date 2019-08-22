@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     generateSQL: function() {
+      var SqlFormat = `{{${this.uuid}}}`
       return this.querylocal.value ? this.querylocal.value : "";
     }
   }

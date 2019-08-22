@@ -3,7 +3,7 @@
  * Copied from Vue MultiSelect and Vuex.
  * @type {Object}
  */
-const deepClone = function (obj) {
+export const deepClone = function (obj) {
     if (Array.isArray(obj)) {
         return obj.map(deepClone)
     } else if (obj && typeof obj === 'object') {
@@ -19,4 +19,9 @@ const deepClone = function (obj) {
     }
 }
 
-export default deepClone;
+export const replaceTemplate = function (str, dict) {
+    var re = RegExp('\\{\\{(' + Object.keys(dict).join('|') + ')\\}\\}', 'g');
+    return str.replace(re, function (a, b) {
+        return dict[b];
+    });
+}

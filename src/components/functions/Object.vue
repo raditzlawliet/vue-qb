@@ -41,17 +41,29 @@ export default {
         ? this.ruleslocal[this.querylocal.type].list()
         : {};
       // return {};
+    },
+    listKey() {},
+    listValue() {},
+    listText() {}
+  },
+  watch: {
+    "querylocal.value": function(v) {
+      if (this.lObjects[v])
+        this.querylocal.sqlValue = this.lObjects[v].sqlValue;
     }
   },
   methods: {
-    getDefaultObject: function() {
+    getQueryModel: function() {
       return {
-        id: "",
-        name: ""
+        uuid: this.generateUUID(),
+        type: "",
+        values: [],
+        value: "",
+        sqlValue: ""
       };
     },
     generateSQL: function() {
-      return this.querylocal.value ? this.querylocal.value : "";
+      return this.querylocal.sqlValue ? this.querylocal.sqlValue : "";
     }
   }
 };
