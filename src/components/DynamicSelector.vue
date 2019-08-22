@@ -17,6 +17,7 @@
             :path="`${path}`"
             :rules="rules"
             :depth="depth"
+            @update:query="onUpdateQueryLocal"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -34,6 +35,7 @@
             :path="`${path}`"
             :rules="rules"
             :depth="depth"
+            @update:query="onUpdateQueryLocal"
           >
             <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
             <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -65,6 +67,7 @@
               :path="`${path}`"
               :rules="rules"
               :depth="depth"
+              @update:query="onUpdateQueryLocal"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -82,6 +85,7 @@
               :path="`${path}`"
               :rules="rules"
               :depth="depth"
+              @update:query="onUpdateQueryLocal"
             >
               <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
               <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -183,6 +187,9 @@ export default {
     componentOnRemove: function() {
       this.querylocal = this.getQueryModel();
       EventBus.$emit("update:complete-query", this.path, this.querylocal);
+    },
+    onUpdateQueryLocal: function(query) {
+      this.$emit("update:query", query);
     }
   }
 };

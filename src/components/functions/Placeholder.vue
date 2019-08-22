@@ -173,7 +173,7 @@ export default {
   data() {
     return {
       templateId: "placeholder",
-      querylocal: deepClone(this.normalizeQuery(this.query)),
+      querylocal: this.normalizeQuery(this.query),
       optionslocal: this.normalizeOptions(this.options),
       ruleslocal: this.normalizeRules(this.rules)
     };
@@ -250,17 +250,17 @@ export default {
       return Object.assign({}, defaultOptions(), d);
     },
     normalizeQuery: function(d) {
-      var validQuery = Object.assign({}, this.getQueryModel(), d);
+      var validQuery = deepClone(Object.assign({}, this.getQueryModel(), d));
       validQuery.values.forEach((v, i) => {
-        // var validQueryInside = this.normalizeQuery(v);
-        // if (
-        //   JSON.stringify(
-        //     validQuery.values[i] != JSON.stringify(validQueryInside)
-        //   )
-        // )
-        //   validQuery.values.splice(i, 1, validQueryInside);
+        var validQueryInside = this.normalizeQuery(v);
+        if (
+          JSON.stringify(
+            validQuery.values[i] != JSON.stringify(validQueryInside)
+          )
+        )
+          validQuery.values.splice(i, 1, validQueryInside);
         // validQuery.values[i] = this.normalizeQuery(v);
-        if (!v.uuid) v.uuid = this.generateUUID();
+        // if (!v.uuid) v.uuid = this.generateUUID();
       });
       return validQuery;
     },

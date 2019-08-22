@@ -39,11 +39,11 @@ export default {
   mounted() {},
   created() {
     EventBus.$on("update:complete-query", (path, query) => {
-      //console.log(
-      //  "EB$on:update:complete-query>",
-      //  path,
-      //  JSON.stringify(query, null, "\t")
-      //);
+      console.log(
+        "EB$on:update:complete-query>",
+        path,
+        JSON.stringify(query, null, "\t")
+      );
       if (!path) {
         this.completeQuery = deepClone(query);
       } else {
@@ -58,7 +58,7 @@ export default {
         // console.log("watch query", JSON.stringify(v));
         var nQuery = this.normalizeQuery(v);
         if (JSON.stringify(this.normalizedQuery) != JSON.stringify(nQuery)) {
-          this.normalizedQuery = deepClone(nQuery);
+          this.normalizedQuery = nQuery;
         }
         this.completeQuery = deepClone(this.normalizedQuery);
         // if (JSON.stringify(this.normalizedQuery) != JSON.stringify(v)) {
@@ -88,16 +88,19 @@ export default {
       return "";
     },
     normalizeQuery: function(d) {
-      var validQuery = Object.assign(
-        {
-          uuid: this.generateUUID(),
-          type: "",
-          value: undefined,
-          values: []
-        },
-        d
+      var validQuery = deepClone(
+        Object.assign(
+          {
+            uuid: this.generateUUID(),
+            type: "",
+            value: undefined,
+            values: []
+          },
+          d
+        )
       );
       validQuery.values.forEach((v, i) => {
+        // if (!v.uuid) v.uuid = this.generateUUID();
         var validQueryInside = this.normalizeQuery(v);
         if (
           JSON.stringify(

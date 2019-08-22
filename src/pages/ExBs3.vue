@@ -76,6 +76,16 @@ export default {
       //   ]
       // }
     };
+    this.query = {
+      type: "Concat",
+      values: [
+        { type: "Value", value: "123" },
+        { type: "Object", values: [] },
+        { type: "Attribute", values: [] },
+        { type: "Case", values: [] },
+        { type: "Trim", values: [] }
+      ]
+    };
     setTimeout(() => {
       this.generateSQL();
       this.generatedJSON = JSON.stringify(this.query);

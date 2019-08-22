@@ -109,6 +109,7 @@
 <script>
 import Placeholder from "./Placeholder.vue";
 import { EventBus } from "@/components/event-bus.js";
+import deepClone from "@/utilities.js";
 
 export default {
   extends: Placeholder,
@@ -145,11 +146,13 @@ export default {
       );
     },
     removeItem: function(i) {
+      // console.log(JSON.stringify(this.querylocal.values));
       // this.querylocal.values.splice(
       //   this.querylocal.values.findIndex(v => v.uuid == item.uuid),
       //   1
       // );
       this.querylocal.values.splice(i, 1);
+      // console.log(JSON.stringify(this.querylocal.values));
       EventBus.$emit(
         "update:complete-query",
         this.path + ".values",
@@ -157,7 +160,8 @@ export default {
       );
     },
     onUpdateQueryLocal: function(i, query) {
-      // console.log(i, query);
+      console.log(i, query);
+      this.querylocal.values.splice(i, 1, deepClone(query));
       // this.querylocal.values[i] = query;
     },
   }
