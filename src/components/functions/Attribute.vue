@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :data-depth="depth">
     <div
       class="d-flex d-flex-row"
       v-if="['bs4', 'bs3'].includes(normalizedTemplateOptions.template)"
@@ -15,7 +15,7 @@
       <div class="ml-2">
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
+          v-show="myrule.isRemoveable(myrule, depth, querylocal) && querylocal.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>
@@ -26,12 +26,19 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
+import globalSettings from "@/components/globalSettings.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
     return {};
+  },
+  watch: {
+    "querylocal.value": function(v) {
+      if (this.lAttributes[v])
+        this.querylocal.sqlValue = this.lAttributes[v].sqlValue;
+    }
   },
   computed: {
     lAttributes() {
@@ -42,6 +49,15 @@ export default {
     }
   },
   methods: {
+    getQueryModel: function() {
+      return {
+        uuid: this.generateUUID(),
+        type: "",
+        values: [],
+        value: "",
+        sqlValue: ""
+      };
+    },
     getDefaultObject: function() {
       return {
         id: "",
@@ -49,7 +65,7 @@ export default {
       };
     },
     generateSQL: function() {
-      return this.querylocal.value ? this.querylocal.value : "";
+      return this.querylocal.sqlValue ? this.querylocal.sqlValue : "";
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :data-depth="depth">
     <div v-if="normalizedTemplateOptions.template =='bs4'">
       <div>
         <slot name="f-trim-begin">
@@ -56,7 +56,7 @@
       <label class="control-label input-sm">)</label>
       <button
         :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-        v-show="optionslocal.removeable && querylocal.type"
+        v-show="myrule.isRemoveable(myrule, depth, querylocal) && querylocal.type"
         @click="remove"
       >
         <slot name="btn-remove">X</slot>

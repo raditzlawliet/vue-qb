@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :data-depth="depth">
     <div
       class="d-flex d-flex-row"
       v-if="['bs4', 'bs3'].includes(normalizedTemplateOptions.template)"
@@ -15,7 +15,7 @@
       <div class="ml-2">
         <button
           :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="optionslocal.removeable && querylocal.type"
+          v-show="myrule.isRemoveable(myrule, depth, querylocal) && querylocal.type"
           @click="remove"
         >
           <slot name="btn-remove">X</slot>

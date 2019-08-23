@@ -1,5 +1,5 @@
 <template>
-  <div :class="[...normalizedTemplateOptions.options.formGroupClass]">
+  <div :class="[...normalizedTemplateOptions.options.formGroupClass]" :data-depth="depth">
     <component :is="{template:htmlTemplateWithWrapper}" ref="placeholder" :rules="rules">
       <!-- <slot v-for="(_, name) in $slots" :name="name" :slot="name" /> -->
       <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
@@ -176,7 +176,17 @@ export default {
       querylocal: this.normalizeQuery(this.query),
       optionslocal: this.normalizeOptions(this.options),
       ruleslocal: this.normalizeRules(this.rules),
-      defaultSqlFormat: "" ,
+      defaultSqlFormat: "",
+      defaultMyRule: {
+        funcId: "Value",
+        type: "value",
+        label: "Value",
+        maxDepth: -1,
+        list: () => {
+          return [];
+        },
+        isRemoveable: (myrule, depth, query) => true
+      }
     };
   },
   mounted() {
@@ -186,6 +196,12 @@ export default {
     // });
   },
   computed: {
+    myrule() {
+      return {
+        ...this.defaultMyRule,
+        ...this.ruleslocal[this.querylocal.type]
+      };
+    },
     sqlFormat() {
       return this.rules.sqlFormat || this.defaultSqlFormat;
     },
