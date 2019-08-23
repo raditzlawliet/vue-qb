@@ -47,7 +47,11 @@
             v-model="querylocal.type"
             v-else
           >
-            <option v-for="(r, key) in filteredRules" :key="key" :value="key">{{r.label}}</option>
+            <option
+              v-for="(r, key) in filteredRules"
+              :key="key"
+              :value="key"
+            >{{filterLabel(key, r)}}</option>
           </select>
           <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
         </div>
@@ -97,7 +101,11 @@
               v-model="querylocal.type"
               v-else
             >
-              <option v-for="(r, key) in filteredRules" :key="key" :value="key">{{r.label}}</option>
+              <option
+                v-for="(r, key) in filteredRules"
+                :key="key"
+                :value="key"
+              >{{filterLabel(r, key)}}</option>
             </select>
             <!-- <button class="btn btn-danger btn-sm" v-show="removeable && querylocal.type" @click="remove">X</button> -->
           </div>
@@ -147,7 +155,7 @@ export default {
           return obj;
         }, {});
       return filtered;
-    }
+    },
   },
   mounted() {
     this.loadComponent();
@@ -167,6 +175,11 @@ export default {
     };
   },
   methods: {
+    filterLabel(rule, key) {
+      return typeof rule.label === "function"
+        ? rule.label(rule, key)
+        : rule.label;
+    },
     loadComponent: function() {
       if (this.loader && this.loader.component)
         this.loader

@@ -59,7 +59,7 @@
       </div>
     </div>
     <div v-if="normalizedTemplateOptions.template =='bs3'">
-      <label class="control-label input-sm">CONCAT (</label>
+      <label class="control-label input-sm">COALESCE (</label>
       <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
         <slot name="btn-add">+</slot>
       </button>
