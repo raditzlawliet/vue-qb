@@ -28,56 +28,74 @@ var lRules = {
     label: " -- Select -- ",
     maxDepth: -1,
   },
-  "Case": {
-    funcId: "Case",
+  "case": {
+    funcId: "case",
     type: "statement",
     label: "Case",
     maxDepth: -1,
-    list: () => {
-      return lObjects;
-    }
+    isRemoveable: (rule, depth, query) => true
   },
-  "Trim": {
-    funcId: "Trim",
+  "trim": {
+    funcId: "trim",
     type: "function",
     maxDepth: -1,
     label: "Trim",
+    isRemoveable: (rule, depth, query) => true
   },
-  "Concat": {
-    funcId: "Concat",
+  "concat": {
+    funcId: "concat",
     type: "function",
     maxDepth: -1,
-      label: "Concat",
+    label: "Concat",
+    isRemoveable: (rule, depth, query) => true
   },
-  "Object": {
-    funcId: "Object",
+  "coalesce": {
+    funcId: "coalesce",
+    type: "function",
+    maxDepth: -1,
+    label: "Coalesce",
+    isRemoveable: (rule, depth, query) => true
+  },
+  // "split": {
+  //   funcId: "split",
+  //   type: "function",
+  //   maxDepth: -1,
+  //   label: "Split",
+  //   isRemoveable: (rule, depth, query) => true
+  // },
+  "object": {
+    funcId: "object",
     type: "value",
     label: "Table / Object",
     maxDepth: -1,
-    list: () => {
+    list: (rule, depth, query) => {
       return lObjects;
-    }
+    },
+    isRemoveable: (rule, depth, query) => true
   },
-  "Attribute": {
-    funcId: "Attribute",
+  "attribute": {
+    funcId: "attribute",
     type: "value",
     label: "Column / Attribute",
     maxDepth: -1,
-    list: () => {
+    list: (rule, depth, query) => {
       return lAttributes;
-    }
+    },
+    isRemoveable: (rule, depth, query) => true
   },
-  "Value": {
-    funcId: "Value",
+  "value": {
+    funcId: "value",
     type: "value",
     label: "Value",
     maxDepth: -1,
+    isRemoveable: (rule, depth, query) => true
   },
-  "Manual": {
-    funcId: "Value",
+  "manual": {
+    funcId: "manual",
     type: "value",
     label: "Manual",
     maxDepth: -1,
+    isRemoveable: (rule, depth, query) => true
   },
 };
 

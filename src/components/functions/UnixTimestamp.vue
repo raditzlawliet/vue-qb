@@ -2,12 +2,12 @@
   <div :data-depth="depth">
     <div v-if="normalizedTemplateOptions.template =='bs4'">
       <div>
-        <slot name="f-trim-begin">
-          <label class="col-form-label col-form-label-sm">TRIM (</label>
+        <slot name="f-unix-timestamp-begin">
+          <label class="col-form-label col-form-label-sm">UNIX_TIMESTAMP (</label>
         </slot>
       </div>
       <div class="ml-2">
-        <slot name="f-trim-value">
+        <slot name="f-unix-timestamp-value">
           <dynamic-selector
             ref="value"
             :query="querylocal.value"
@@ -24,7 +24,7 @@
         </slot>
       </div>
       <div>
-        <slot name="f-trim-end">
+        <slot name="f-unix-timestamp-end">
           <label class="col-form-label col-form-label-sm">)</label>
         </slot>
         <button
@@ -37,7 +37,7 @@
       </div>
     </div>
     <div v-if="normalizedTemplateOptions.template =='bs3'">
-      <label class="control-label input-sm">TRIM (</label>
+      <label class="control-label input-sm">UNIX_TIMESTAMP (</label>
       <div class="ml-2">
         <dynamic-selector
           ref="value"
@@ -73,8 +73,8 @@ export default {
   props: {},
   data() {
     return {
-      templateId: "trim",
-      defaultSqlFormat: "TRIM ({{value}})"
+      templateId: "unix-timestamp",
+      defaultSqlFormat: "UNIX_TIMESTAMP ({{value}})"
     };
   },
   computed: {
@@ -85,19 +85,12 @@ export default {
     }
   },
   methods: {
-    // generateStructuredSQL: function() {
-    //   var sqlFormatScoped = this.sqlFormatScoped;
-    //   var values = {};
-    //   values[this.querylocal.uuid] = this.$refs.value.generateSQL(isObject);
-    //   return { sql: replaceTemplate(sqlFormatScoped, values), values: values };
-    // },
     generateSQL: function() {
       return replaceTemplate(this.sqlFormat, {
         value: replaceTemplate(this.valueWrapper, {
           value: this.$refs.value.generateSQL()
         })
       });
-      // return `TRIM (${this.$refs.value.generateSQL()})`;
     }
   }
 };

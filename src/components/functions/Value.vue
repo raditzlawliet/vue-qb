@@ -24,17 +24,32 @@
 </template>
 <script>
 import Placeholder from "./Placeholder.vue";
+import { replaceTemplate } from "@/utilities.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
-    return {};
+    return {
+      templateId: "value",
+      defaultSqlFormat: "{{value}}"
+    };
+  },
+  computed: {
+    sqlFormatScoped() {
+      return replaceTemplate(this.sqlFormat, {
+        value: `{{${this.querylocal.uuid}}}`
+      });
+    }
   },
   methods: {
     generateSQL: function() {
-      var SqlFormat = `{{${this.uuid}}}`
-      return this.querylocal.value ? this.querylocal.value : "";
+      return replaceTemplate(this.sqlFormat, {
+        value: replaceTemplate(this.valueWrapper, {
+          value: this.querylocal.value ? this.querylocal.value : ""
+        })
+      });
+      // return this.querylocal.value ? this.querylocal.value : "";
     }
   }
 };

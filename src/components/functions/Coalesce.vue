@@ -2,15 +2,15 @@
   <div :data-depth="depth">
     <div v-if="normalizedTemplateOptions.template =='bs4'">
       <div>
-        <slot name="f-concat-begin">
-          <label class="col-form-label col-form-label-sm">CONCAT (</label>
+        <slot name="f-coalesce-begin">
+          <label class="col-form-label col-form-label-sm">COALESCE (</label>
         </slot>
         <button :class="[...normalizedTemplateOptions.options.addBtnClass]" @click="addItem">
           <slot name="btn-add">+</slot>
         </button>
       </div>
       <div v-for="(item, index) in querylocal.values" :key="`${item.uuid}`" class="ml-2">
-        <slot name="f-concat-value">
+        <slot name="f-coalesce-value">
           <div class="d-flex d-flex-row">
             <div class="mr-2">
               <button
@@ -38,7 +38,7 @@
               </dynamic-selector>
             </div>
             <div :class="[...normalizedTemplateOptions.options.columnClass]">
-              <slot name="f-concat-separator">
+              <slot name="f-coalesce-separator">
                 <label style="margin-left: 0.5em;">,</label>
               </slot>
             </div>
@@ -46,7 +46,7 @@
         </slot>
       </div>
       <div>
-        <slot name="f-concat-end">
+        <slot name="f-coalesce-end">
           <label class="col-form-label col-form-label-sm">)</label>
         </slot>
         <button
@@ -113,12 +113,11 @@ import { deepClone, replaceTemplate } from "@/utilities.js";
 
 export default {
   extends: Placeholder,
-  // components: {},
   props: {},
   data() {
     return {
-      templateId: "concat",
-      defaultSqlFormat: "CONCAT ({{values}})"
+      templateId: "coalesce",
+      defaultSqlFormat: "COALESCE ({{values}})"
     };
   },
   created() {
@@ -136,14 +135,6 @@ export default {
   },
   methods: {
     generateSQL: function() {
-      // var values = this.querylocal.values
-      //   .map((v, i) => {
-      //     return this.$refs.values_[i]
-      //       ? this.$refs.values_[i].generateSQL()
-      //       : "";
-      //   })
-      //   .join(", ");
-      // return `CONCAT (${values})`;
       var values = this.querylocal.values
         .map((v, i) => {
           return replaceTemplate(this.valueWrapper, {
@@ -166,13 +157,7 @@ export default {
       );
     },
     removeItem: function(i) {
-      // console.log(JSON.stringify(this.querylocal.values));
-      // this.querylocal.values.splice(
-      //   this.querylocal.values.findIndex(v => v.uuid == item.uuid),
-      //   1
-      // );
       this.querylocal.values.splice(i, 1);
-      // console.log(JSON.stringify(this.querylocal.values));
       EventBus.$emit(
         "update:complete-query",
         this.path + ".values",
@@ -180,9 +165,7 @@ export default {
       );
     },
     onUpdateQueryLocal: function(i, query) {
-      // console.log(i, query);
       this.querylocal.values.splice(i, 1, deepClone(query));
-      // this.querylocal.values[i] = query;
     }
   }
 };

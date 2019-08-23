@@ -118,16 +118,20 @@ export default {
   computed: {
     loader() {
       if (this.querylocal.type) {
-        var rule = this.rules[this.querylocal.type];
-        var f = globalFunctions[rule.funcId];
-        if (f) {
-          if (f.isTemplate) {
-            f.component = () => import(`@/components/functions/Placeholder`);
+        var rule = this.rules[this.querylocal.type.toLowerCase()];
+        if (rule) {
+          var f = globalFunctions[rule.funcId];
+          if (f) {
+            if (f.isTemplate) {
+              f.component = () => import(`@/components/functions/Placeholder`);
+            }
+            if (f.component) return f;
           }
-          if (f.component) return f;
+          // return () => import(`@/components/functions/${this.querylocal.type}`);
+          // return () => import(`@/components/functions/Value`);
+        } else {
+          console.error("Rule not found for type:", this.querylocal.type);
         }
-        // return () => import(`@/components/functions/${this.querylocal.type}`);
-        // return () => import(`@/components/functions/Value`);
       }
       return null;
     },
@@ -150,7 +154,7 @@ export default {
   },
   watch: {
     "querylocal.type": {
-      handler: function(v) {
+      handler: function() {
         this.loadComponent();
       },
       immediate: true

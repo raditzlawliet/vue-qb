@@ -10,7 +10,6 @@
           <vue-query-builder
             ref="foo"
             :query="query"
-            :rules="rules"
             @update:complete-query="onQueryUpdate"
             :templateOptions="templateOptions"
           ></vue-query-builder>
@@ -18,7 +17,7 @@
           <hr />
           <button class="btn btn-success" @click="generateSQL">Print SQL</button>
           <div class="alert alert-info" role="alert" style="margin-top: 1em">
-            <code>{{ generatedSQL }}</code>
+            <pre>{{ generatedSQL }}</pre>
           </div>
           <div class="alert alert-success" role="alert" style="margin-top: 1em">
             <code>{{ generatedJSON }}</code>
@@ -51,70 +50,6 @@ export default {
         //   values: []
         // }
       },
-      objects: [{ id: 1, name: "1", sqlValue: "1" }],
-      rules: {
-        "": {
-          funcId: "",
-          type: "selector",
-          label: " -- Select -- ",
-          maxDepth: -1
-        },
-        Case: {
-          funcId: "Case",
-          type: "statement",
-          label: "Case",
-          maxDepth: -1,
-          list: () => {
-            return lObjects;
-          }
-        },
-        Trim: {
-          funcId: "Trim",
-          type: "function",
-          maxDepth: -1,
-          label: "Trim"
-        },
-        Concat: {
-          funcId: "Concat",
-          type: "function",
-          maxDepth: -1,
-          label: "Concat"
-        },
-        Object: {
-          funcId: "Object",
-          type: "value",
-          label: "Table / Object",
-          maxDepth: -1,
-          list: () => {
-            return this.objects;
-          }
-        },
-        Attribute: {
-          funcId: "Attribute",
-          type: "value",
-          label: "Column / Attribute",
-          maxDepth: -1,
-          list: () => {
-            return [];
-          }
-        },
-        Value: {
-          funcId: "Value",
-          type: "value",
-          label: "Value",
-          maxDepth: -1,
-          isRemoveable: (myrule, depth, query) => {
-            // return depth != 0;
-            return true
-          }
-        },
-        Manual: {
-          funcId: "Value",
-          type: "value",
-          label: "Manual",
-          maxDepth: -1
-        }
-      }
     };
   },
   methods: {

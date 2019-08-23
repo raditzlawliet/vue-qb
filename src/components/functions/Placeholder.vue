@@ -176,16 +176,24 @@ export default {
       querylocal: this.normalizeQuery(this.query),
       optionslocal: this.normalizeOptions(this.options),
       ruleslocal: this.normalizeRules(this.rules),
+
       defaultSqlFormat: "",
+      defaultSqlMultivaluedSeparator: ", ",
+      defaultValueWrapper: "{{value}}",
+
       defaultMyRule: {
         funcId: "Value",
         type: "value",
         label: "Value",
         maxDepth: -1,
-        list: () => {
+        list: (rule, depth, query) => {
           return [];
         },
-        isRemoveable: (myrule, depth, query) => true
+        isRemoveable: (rule, depth, query) => true,
+
+        // sqlFormat: "",
+        // sqlMultivaluedSeparator: ", ",
+        // valueWrapper: "{{value}}"
       }
     };
   },
@@ -196,16 +204,29 @@ export default {
     // });
   },
   computed: {
+    // merge rule
     myrule() {
       return {
         ...this.defaultMyRule,
         ...this.ruleslocal[this.querylocal.type]
       };
     },
+
+    // merge component based
     sqlFormat() {
-      return this.rules.sqlFormat || this.defaultSqlFormat;
+      return this.ruleslocal.sqlFormat || this.defaultSqlFormat;
     },
-    // parsing from rules standard sql format into sql with id for replacer
+    sqlMultivaluedSeparator() {
+      return (
+        this.ruleslocal.sqlMultivaluedSeparator ||
+        this.defaultSqlMultivaluedSeparator
+      );
+    },
+    valueWrapper() {
+      return this.ruleslocal.valueWrapper || this.defaultValueWrapper;
+    },
+
+    // extend from sqlFormat each component, parsing from rules standard sql format into sql with id for replacer
     sqlFormatScoped() {
       return this.sqlFormat;
     },

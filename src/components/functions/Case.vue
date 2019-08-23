@@ -182,7 +182,7 @@
       </slot>
       <button
         :class="[...normalizedTemplateOptions.options.removeBtnClass]"
-          v-show="myrule.isRemoveable(myrule, depth, querylocal) && querylocal.type"
+        v-show="myrule.isRemoveable(myrule, depth, querylocal) && querylocal.type"
         @click="remove"
       >
         <slot name="btn-remove">X</slot>
@@ -193,13 +193,30 @@
 <script>
 import Placeholder from "./Placeholder.vue";
 import { EventBus } from "@/components/event-bus.js";
-import { deepClone } from "@/utilities.js";
+import { deepClone, replaceTemplate } from "@/utilities.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
-    return {};
+    return {
+      defaultSqlFormat: `CASE
+  {{whenThenValues}}
+  ELSE {{elseValue}}
+END`,
+      defaultWhenThenFormat: `WHEN {{whenValue}} THEN {{thenValue}}`,
+      defaultsqlMultivaluedSeparator: "\n"
+    };
+  },
+  computed: {
+    whenThenFormat() {
+      return this.rules.whenThenFormat || this.defaultWhenThenFormat;
+    },
+    sqlFormatScoped() {
+      return replaceTemplate(this.sqlFormat, {
+        values: `{{${this.querylocal.uuid}}}`
+      });
+    }
   },
   created() {
     if (this.querylocal.values.length == 0) this.addItem();
@@ -209,22 +226,45 @@ export default {
   },
   methods: {
     generateSQL: function() {
+      //       var whenThenValues = this.querylocal.values
+      //         .map((v, i) => {
+      //           var whenValue = this.$refs.whenValue_[i]
+      //             ? this.$refs.whenValue_[i].generateSQL()
+      //             : "";
+      //           var thenValue = this.$refs.thenValue_[i]
+      //             ? this.$refs.thenValue_[i].generateSQL()
+      //             : "";
+      //           return `WHEN ${whenValue} THEN ${thenValue}`;
+      //         })
+      //         .join("\n");
+      //       return `CASE
+      //   ${whenThenValues}
+      //   ELSE ${this.$refs.elseValue.generateSQL()}
+      // END`;
       var whenThenValues = this.querylocal.values
         .map((v, i) => {
-          var whenValue = this.$refs.whenValue_[i]
-            ? this.$refs.whenValue_[i].generateSQL()
-            : "";
-          var thenValue = this.$refs.thenValue_[i]
-            ? this.$refs.thenValue_[i].generateSQL()
-            : "";
-          return `WHEN ${whenValue} THEN ${thenValue}`;
+          var whenValue = replaceTemplate(this.valueWrapper, {
+            value: this.$refs.whenValue_[i]
+              ? this.$refs.whenValue_[i].generateSQL()
+              : ""
+          });
+          var thenValue = replaceTemplate(this.valueWrapper, {
+            value: this.$refs.thenValue_[i]
+              ? this.$refs.thenValue_[i].generateSQL()
+              : ""
+          });
+          return replaceTemplate(this.defaultWhenThenFormat, {
+            whenValue: whenValue,
+            thenValue: thenValue
+          });
         })
-        .join("\n");
-
-      return `CASE
-  ${whenThenValues}
-  ELSE ${this.$refs.elseValue.generateSQL()}
-END`;
+        .join(this.defaultsqlMultivaluedSeparator);
+      return replaceTemplate(this.sqlFormat, {
+        whenThenValues: whenThenValues,
+        elseValue: replaceTemplate(this.valueWrapper, {
+          value: this.$refs.elseValue.generateSQL()
+        })
+      });
     },
     addItem: function() {
       this.querylocal.values.push({

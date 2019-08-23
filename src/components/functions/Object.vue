@@ -27,18 +27,31 @@
 <script>
 import Placeholder from "./Placeholder.vue";
 import globalSettings from "@/components/globalSettings.js";
+import { replaceTemplate } from "@/utilities.js";
 
 export default {
   extends: Placeholder,
   props: {},
   data() {
-    return {};
+    return {
+      templateId: "object",
+      defaultSqlFormat: "{{sqlValue}}"
+    };
   },
   computed: {
+    sqlFormatScoped() {
+      return replaceTemplate(this.sqlFormat, {
+        value: `{{${this.querylocal.uuid}}}`
+      });
+    },
     lObjects() {
       // console.log(this.ruleslocal);
       return this.ruleslocal[this.querylocal.type]
-        ? this.ruleslocal[this.querylocal.type].list()
+        ? this.ruleslocal[this.querylocal.type].list(
+            this.myrule,
+            this.depth,
+            this.querylocal
+          )
         : {};
       // return {};
     },
@@ -63,7 +76,12 @@ export default {
       };
     },
     generateSQL: function() {
-      return this.querylocal.sqlValue ? this.querylocal.sqlValue : "";
+      return replaceTemplate(this.sqlFormat, {
+        sqlValue: replaceTemplate(this.valueWrapper, {
+          value: this.querylocal.sqlValue ? this.querylocal.sqlValue : ""
+        })
+      });
+      // return this.querylocal.sqlValue ? this.querylocal.sqlValue : "";
     }
   }
 };
