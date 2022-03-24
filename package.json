@@ -35,7 +35,7 @@
     "kind-of": ">=6.0.3",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
-    "minimist": ">=1.2.3",
+    "minimist": ">=1.2.6",
     "node-sass": "^4.13.1",
     "popper.js": "^1.16.1",
     "postcss-loader": "^3.0.0",
